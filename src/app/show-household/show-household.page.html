@@ -1,0 +1,117 @@
+<ion-menu contentId="show-household-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-menu-toggle>
+          <ion-button>
+            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+        </ion-menu-toggle>
+      </ion-buttons>
+      <ion-title>{{user.first_name}} {{user.last_names}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item [routerLink]="['/households']" routerDirection="root">
+        <ion-icon slot="start" name="home"></ion-icon>
+        Hogares
+      </ion-item>
+      <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
+        <ion-icon slot="start" name="cart"></ion-icon>
+        Listas de la compra
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="show-household-content">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+        {{household.description}}
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="shareHousehold()" *ngIf="isCreator">
+          <ion-icon slot="icon-only" name="qr-code-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+    <ion-item color="primary">
+      <ion-label>
+        Despensas
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="setOpen(true)">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+    <ion-item-sliding *ngFor="let pantry of pantries; index as i">
+      <ion-item>
+        <ion-label>
+          [{{pantry.type}}] {{pantry.description}}
+        </ion-label>
+        <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+      </ion-item>
+      <ion-item-options side="end">
+        <ion-item-option color="dark" (click)="showPantry(i)">
+          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+        </ion-item-option>
+        <ion-item-option color="danger" (click)="deletePantry(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+    </ion-item-sliding>
+
+    <ion-grid class="ion-text-center">
+      <ion-row>
+        <ion-col size="12">
+          <qrcode [qrdata]="qrCode" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <ion-modal [isOpen]="isModalOpen">
+      <!-- Creación de nueva despensa -->
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="setOpen(false)">
+                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-title>Nueva despensa</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="newPantry(pantry_validation_form.value)" [strong]="true"
+                [disabled]="!pantry_validation_form.valid">Crear</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <form [formGroup]="pantry_validation_form">
+            <ion-item>
+              <ion-label position="floating">Descripción</ion-label>
+              <ion-input type="text" placeholder="Descripción de la despensa (ej: Balda superior)"
+                formControlName="description"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-label position="floating">Tipo</ion-label>
+              <ion-input type="text" placeholder="Tipo de despensa" formControlName="type"></ion-input>
+            </ion-item>
+          </form>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  </ion-content>
+</div>

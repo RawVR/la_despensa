@@ -1,0 +1,203 @@
+<ion-menu contentId="show-pantry-content" [hidden]="scanningBarcode">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-menu-toggle>
+          <ion-button>
+            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+        </ion-menu-toggle>
+      </ion-buttons>
+      <ion-title>{{user.first_name}} {{user.last_names}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item [routerLink]="['/households']" routerDirection="root">
+        <ion-icon slot="start" name="home"></ion-icon>
+        Hogares
+      </ion-item>
+      <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
+        <ion-icon slot="start" name="cart"></ion-icon>
+        Listas de la compra
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="show-pantry-content" [hidden]="scanningBarcode">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>{{pantry.description}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+
+  <ion-content [fullscreen]="true">
+    <ion-item color="primary">
+      <ion-label>
+        Alimentos
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="setOpen(true)">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+
+    <div *ngFor="let category of foodCategories; index as i">
+      <ion-item color="secondary">
+        <ion-label>{{category}}</ion-label>
+      </ion-item>
+      <div *ngFor="let food of pantry.foods; index as i">
+        <ion-item-sliding *ngIf="category === food.category">
+          <ion-item>
+            <ion-label>
+              {{food.name}} - {{food.description}}
+            </ion-label>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="danger" (click)="deleteFood(i)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
+    </div>
+    
+
+
+    <ion-modal [isOpen]="isModalOpen">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="setOpen(false)">
+                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-title>Nuevo alimento</ion-title>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <div *ngIf="typeModal === 'buttons'">
+            <form [formGroup]="addFood_validation_form">
+              <ion-item>
+                <ion-select placeholder="Selecciona un alimento" formControlName="food">
+                  <ion-select-option *ngFor="let food of household.foods" [value]="food">{{food.name}}
+                  </ion-select-option>
+                </ion-select>
+                <ion-buttons slot="end">
+                  <ion-button (click)="scanFood(1)">
+                    <ion-icon slot="icon-only" name="barcode"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+              <ion-item>
+                <ion-label>Fecha de caducidad</ion-label>
+                <ion-datetime-button datetime="datetime"></ion-datetime-button>
+              </ion-item>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="datetime" formControlName="expiration"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+              <ion-item>
+                <ion-label position="floating">Descripción</ion-label>
+                <ion-input type="text" placeholder="Descripción del alimento"
+                  formControlName="description"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>Cantidad</ion-label>
+                <ion-input type="number" formControlName="quantity" maxlength="3">
+                </ion-input>
+              </ion-item>
+            </form>
+
+
+            <ion-button (click)="addFood(addFood_validation_form.value)" expand="block"
+              [disabled]="!addFood_validation_form.valid">Añadir alimento</ion-button>
+            <br>
+            <ion-button (click)="setSourceFood('newFood')" expand="block">Crear nuevo alimento</ion-button>
+          </div>
+          <div *ngIf="typeModal === 'newFood'">
+            <form [formGroup]="food_validation_form">
+              <ion-item>
+                <ion-label position="floating">Nombre</ion-label>
+                <ion-input type="text" placeholder="Nombre del alimento" formControlName="name">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Descripción</ion-label>
+                <ion-input type="text" placeholder="Descripción del alimento"
+                  formControlName="description"></ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Categoría</ion-label>
+                <ion-input type="text" placeholder="Categoría del alimento" formControlName="category">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>Cantidad</ion-label>
+                <ion-input type="number" formControlName="quantity" maxlength="3">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label position="floating">Tags</ion-label>
+                <ion-input type="text" placeholder="Palabras separadas por comas" formControlName="tags">
+                </ion-input>
+              </ion-item>
+              <ion-item>
+                <ion-label>Fecha de caducidad</ion-label>
+                <ion-datetime-button datetime="datetime"></ion-datetime-button>
+              </ion-item>
+              <ion-modal [keepContentsMounted]="true">
+                <ng-template>
+                  <ion-datetime id="datetime" formControlName="expiration"></ion-datetime>
+                </ng-template>
+              </ion-modal>
+              <ion-item>
+                <ion-label>Código de barras</ion-label>
+                <ion-input type="text" formControlName="barCode">
+                </ion-input>
+                <ion-buttons>
+                  <ion-button (click)="scanFood(0)">
+                    <ion-icon slot="icon-only" name="barcode"></ion-icon>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+            </form>
+            <ion-button (click)="newFood(food_validation_form.value)" [strong]="true"
+              [disabled]="!food_validation_form.valid" expand="block">Crear</ion-button>
+          </div>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
+
+    <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  </ion-content>
+</div>
+<div class="ion-page" id="show-pantry-content" [hidden]="!scanningBarcode">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="stopScan()">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+      <ion-title>
+        Lector de código de barras
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <div class="scan-code">
+    <span class="scan-code__angle scan-code__angle--top"></span>
+    <span class="scan-code__angle scan-code__angle--bottom"></span>
+  </div>
+</div>

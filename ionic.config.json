@@ -1,0 +1,8 @@
+{
+  "name": "la_despensa",
+  "integrations": {
+    "capacitor": {},
+    "cordova": {}
+  },
+  "type": "angular"
+}
