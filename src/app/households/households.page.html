@@ -15,11 +15,15 @@
     <ion-list>
       <ion-item>
         <ion-icon slot="start" name="home"></ion-icon>
-        Hogares
+        {{ "HOUSEHOLDS_TITTLE" | translate }}
       </ion-item>
       <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
         <ion-icon slot="start" name="cart"></ion-icon>
-        Listas de la compra
+        {{ "SHOPPING_CARTS_TITTLE" | translate }}
+      </ion-item>
+      <ion-item [routerLink]="['/settings']" routerDirection="root">
+        <ion-icon slot="start" name="settings"></ion-icon>
+        {{ "SETTINGS" | translate }}
       </ion-item>
     </ion-list>
   </ion-content>
@@ -40,7 +44,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        Hogares
+        {{ "HOUSEHOLDS_TITTLE" | translate }}
       </ion-title>
     </ion-toolbar>
   </ion-header>
@@ -75,16 +79,16 @@
                 <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
-            <ion-title>Nuevo Hogar</ion-title>
+            <ion-title>{{ "NEW_HOUSEHOLD" | translate }}</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="newHousehold(household_validation_form.value)" [strong]="true" [disabled]="!household_validation_form.valid">Crear</ion-button>
+              <ion-button (click)="newHousehold(household_validation_form.value)" [strong]="true" [disabled]="!household_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
           <form [formGroup]="household_validation_form">
             <ion-item>
-              <ion-label position="floating">Descripción</ion-label>
+              <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
               <ion-input type="text" placeholder="Descripción del hogar" formControlName="description"></ion-input>
             </ion-item>
           </form>
@@ -96,6 +100,7 @@
     </ion-refresher>
   </ion-content>
 </div>
+
 <div class="ion-page" id="households-content" [hidden]="!scanningQR">
   <ion-header [translucent]="true">
     <ion-toolbar>
@@ -105,7 +110,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        Lector QR
+        {{ "QR_READER" | translate }}
       </ion-title>
     </ion-toolbar>
   </ion-header>

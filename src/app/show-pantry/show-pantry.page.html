@@ -15,11 +15,15 @@
     <ion-list>
       <ion-item [routerLink]="['/households']" routerDirection="root">
         <ion-icon slot="start" name="home"></ion-icon>
-        Hogares
+        {{ "HOUSEHOLDS_TITTLE" | translate }}
       </ion-item>
       <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
         <ion-icon slot="start" name="cart"></ion-icon>
-        Listas de la compra
+        {{ "SHOPPING_CARTS_TITTLE" | translate }}
+      </ion-item>
+      <ion-item [routerLink]="['/settings']" routerDirection="root">
+        <ion-icon slot="start" name="settings"></ion-icon>
+        {{ "SETTINGS" | translate }}
       </ion-item>
     </ion-list>
   </ion-content>
@@ -39,7 +43,7 @@
   <ion-content [fullscreen]="true">
     <ion-item color="primary">
       <ion-label>
-        Alimentos
+        {{ "FOODS" | translate }}
       </ion-label>
       <ion-buttons slot="end">
         <ion-button (click)="setOpen(true)">
@@ -80,14 +84,14 @@
                 <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
-            <ion-title>Nuevo alimento</ion-title>
+            <ion-title>{{ "NEW_FOOD" | translate }}</ion-title>
           </ion-toolbar>
         </ion-header>
         <ion-content class="ion-padding">
           <div *ngIf="typeModal === 'buttons'">
             <form [formGroup]="addFood_validation_form">
               <ion-item>
-                <ion-select placeholder="Selecciona un alimento" formControlName="food">
+                <ion-select placeholder="{{ 'SELECT_FOOD' | translate }}" formControlName="food">
                   <ion-select-option *ngFor="let food of household.foods" [value]="food">{{food.name}}
                   </ion-select-option>
                 </ion-select>
@@ -98,7 +102,7 @@
                 </ion-buttons>
               </ion-item>
               <ion-item>
-                <ion-label>Fecha de caducidad</ion-label>
+                <ion-label>{{ "EXPIRY_DATE" | translate }}</ion-label>
                 <ion-datetime-button datetime="datetime"></ion-datetime-button>
               </ion-item>
               <ion-modal [keepContentsMounted]="true">
@@ -107,12 +111,12 @@
                 </ng-template>
               </ion-modal>
               <ion-item>
-                <ion-label position="floating">Descripción</ion-label>
-                <ion-input type="text" placeholder="Descripción del alimento"
+                <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'DESCRIPTION_FOOD_PLACEHOLDER' | translate }}"
                   formControlName="description"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label>Cantidad</ion-label>
+                <ion-label>{{ "QUANTITY" | translate }}</ion-label>
                 <ion-input type="number" formControlName="quantity" maxlength="3">
                 </ion-input>
               </ion-item>
@@ -120,39 +124,39 @@
 
 
             <ion-button (click)="addFood(addFood_validation_form.value)" expand="block"
-              [disabled]="!addFood_validation_form.valid">Añadir alimento</ion-button>
+              [disabled]="!addFood_validation_form.valid">{{ "ADD_FOOD" | translate }}</ion-button>
             <br>
-            <ion-button (click)="setSourceFood('newFood')" expand="block">Crear nuevo alimento</ion-button>
+            <ion-button (click)="setSourceFood('newFood')" expand="block">{{ "CREATE_NEW_FOOD" | translate }}</ion-button>
           </div>
           <div *ngIf="typeModal === 'newFood'">
             <form [formGroup]="food_validation_form">
               <ion-item>
-                <ion-label position="floating">Nombre</ion-label>
-                <ion-input type="text" placeholder="Nombre del alimento" formControlName="name">
+                <ion-label position="floating">{{ "NAME" | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'NAME_PLACEHOLDER' | translate }}" formControlName="name">
                 </ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Descripción</ion-label>
-                <ion-input type="text" placeholder="Descripción del alimento"
+                <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'DESCRIPTION_FOOD_PLACEHOLDER' | translate }}"
                   formControlName="description"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Categoría</ion-label>
-                <ion-input type="text" placeholder="Categoría del alimento" formControlName="category">
+                <ion-label position="floating">{{ "CATEGORY" | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'CATEGORY_PLACEHOLDER' | translate }}" formControlName="category">
                 </ion-input>
               </ion-item>
               <ion-item>
-                <ion-label>Cantidad</ion-label>
+                <ion-label>{{ "QUANTITY" | translate }}</ion-label>
                 <ion-input type="number" formControlName="quantity" maxlength="3">
                 </ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">Tags</ion-label>
-                <ion-input type="text" placeholder="Palabras separadas por comas" formControlName="tags">
+                <ion-label position="floating">{{ "TAGS" | translate }}</ion-label>
+                <ion-input type="text" placeholder="{{ 'TAGS_PLACEHOLDER' | translate }}" formControlName="tags">
                 </ion-input>
               </ion-item>
               <ion-item>
-                <ion-label>Fecha de caducidad</ion-label>
+                <ion-label>{{ "EXPIRY_DATE" | translate }}</ion-label>
                 <ion-datetime-button datetime="datetime"></ion-datetime-button>
               </ion-item>
               <ion-modal [keepContentsMounted]="true">
@@ -161,7 +165,7 @@
                 </ng-template>
               </ion-modal>
               <ion-item>
-                <ion-label>Código de barras</ion-label>
+                <ion-label>{{ "BARCODE" | translate }}</ion-label>
                 <ion-input type="text" formControlName="barCode">
                 </ion-input>
                 <ion-buttons>
@@ -172,7 +176,7 @@
               </ion-item>
             </form>
             <ion-button (click)="newFood(food_validation_form.value)" [strong]="true"
-              [disabled]="!food_validation_form.valid" expand="block">Crear</ion-button>
+              [disabled]="!food_validation_form.valid" expand="block">{{ "CREATE" | translate }}</ion-button>
           </div>
         </ion-content>
       </ng-template>
@@ -192,7 +196,7 @@
         </ion-button>
       </ion-buttons>
       <ion-title>
-        Lector de código de barras
+        {{ "QR_BARCODE" | translate }}
       </ion-title>
     </ion-toolbar>
   </ion-header>

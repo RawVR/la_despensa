@@ -9,6 +9,7 @@ import { HouseholdsPageRoutingModule } from './households-routing.module';
 import { HouseholdsPage } from './households.page';
 
 import { QRCodeModule } from 'angularx-qrcode';
+import { TranslateModule } from '@ngx-translate/core';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +17,8 @@ import { QRCodeModule } from 'angularx-qrcode';
     IonicModule,
     HouseholdsPageRoutingModule,
     ReactiveFormsModule,
-    QRCodeModule
+    QRCodeModule,
+    TranslateModule
   ],
   declarations: [HouseholdsPage]
 })

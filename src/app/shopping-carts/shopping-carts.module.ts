@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ShoppingCartsPageRoutingModule } from './shopping-carts-routing.module';
 
 import { ShoppingCartsPage } from './shopping-carts.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ShoppingCartsPage } from './shopping-carts.page';
     FormsModule,
     IonicModule,
     ShoppingCartsPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   declarations: [ShoppingCartsPage]
 })

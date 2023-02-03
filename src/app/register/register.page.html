@@ -1,6 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>register</ion-title>
+    <ion-buttons slot="start">
+      <ion-button [routerLink]="['/..']" routerLinkActive="router-link-active" >
+        <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ "CREATE_ACCOUNT_TITTLE" | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,17 +13,17 @@
   <form [formGroup]="register_validation_form" (ngSubmit)="onRegister(register_validation_form.value)">
     <ion-card>
       <ion-item>
-        <ion-label position="floating">Email</ion-label>
+        <ion-label position="floating">{{ "EMAIL" | translate }}</ion-label>
         <ion-input type="text" formControlName="email"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="floating">{{ "PASSWORD" | translate }}</ion-label>
         <ion-input type="password" formControlName="password"></ion-input>
       </ion-item>
     </ion-card>
     <ion-row>
       <ion-col>
-        <ion-button type="submit" expand="block" [disabled]="!register_validation_form.valid">Register</ion-button>
+        <ion-button type="submit" expand="block" [disabled]="!register_validation_form.valid">{{ "REGISTER" | translate }}</ion-button>
       </ion-col>
     </ion-row>
   </form>

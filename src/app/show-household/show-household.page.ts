@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NavController, MenuController, AlertController, ToastController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { AlertController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
-import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-service';
 import { Household } from '../modelo/household';
 import { Pantry } from '../modelo/pantry';
 import { User } from '../modelo/user';
@@ -22,13 +22,20 @@ export class ShowHouseholdPage implements OnInit {
   isCreator: Boolean;
   isModalOpen: Boolean;
 
-  constructor(private router: Router, private navCtrl: NavController, public formBuilder: FormBuilder, private alertCtrl: AlertController,
-    private toastController: ToastController, private firebaseService: FireServiceProvider) {
+  constructor(private router: Router, public formBuilder: FormBuilder, private alertCtrl: AlertController,
+    private toastController: ToastController, private firebaseService: FireServiceProvider,
+    public translate: TranslateService) {
     this.user = new User();
     this.household = new Household();
     this.pantries = [];
     this.isCreator = false;
     this.isModalOpen = false;
+
+    let language = localStorage.getItem('language');
+    this.translate.setDefaultLang('en');
+    if (language) {
+      this.translate.use(language);
+    }
   }
 
   ngOnInit() {
@@ -55,13 +62,13 @@ export class ShowHouseholdPage implements OnInit {
 
     this.pantry_validation_form = this.formBuilder.group({
       description: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-z A-ZñáéíóúÁÉÍÓÚ0-9_.-]+$'),
+        Validators.pattern('^[a-zñ A-ZÑáéíóúÁÉÍÓÚ0-9_.-]+$'),
         Validators.minLength(3),
         Validators.maxLength(64),
         Validators.required
       ])),
       type: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-z A-ZñáéíóúÁÉÍÓÚ0-9_.-]+$'),
+        Validators.pattern('^[a-zñ A-ZÑáéíóúÁÉÍÓÚ0-9_.-]+$'),
         Validators.minLength(3),
         Validators.maxLength(32),
         Validators.required
@@ -76,7 +83,7 @@ export class ShowHouseholdPage implements OnInit {
   async deletePantry(index: number) {
     const alert = await this.alertCtrl.create({
       header: 'Eliminar la despensa',
-      message: "¿Está seguro de eliminar la despensa "+ this.pantries[index].description +" permanentemente?",
+      message: "¿Está seguro de eliminar la despensa " + this.pantries[index].description + " permanentemente?",
       buttons: [
         {
           text: 'Cancelar',
@@ -87,9 +94,9 @@ export class ShowHouseholdPage implements OnInit {
           text: 'Eliminar',
           handler: () => {
             this.firebaseService.deletePantry(this.pantries[index].id).then(async (deleted) => {
-              if (deleted){
+              if (deleted) {
                 const toast = await this.toastController.create({
-                  message: 'Despensa '+ this.pantries[index].description +' eliminada correctamente!',
+                  message: 'Despensa ' + this.pantries[index].description + ' eliminada correctamente!',
                   duration: 1500,
                   icon: 'trash'
                 });
@@ -97,7 +104,7 @@ export class ShowHouseholdPage implements OnInit {
                 this.pantries.splice(index, 1);
               } else {
                 const toast = await this.toastController.create({
-                  message: '¡Error al eliminar la despensa'+ this.pantries[index].description +'!',
+                  message: '¡Error al eliminar la despensa' + this.pantries[index].description + '!',
                   duration: 1500,
                   icon: 'trash'
                 });
@@ -111,12 +118,12 @@ export class ShowHouseholdPage implements OnInit {
     await alert.present();
   }
 
-  showPantry(index: number){
+  showPantry(index: number) {
     localStorage.setItem('pantry.id', this.pantries[index].id)
     this.router.navigate(['/show-pantry']);
   }
 
-  newPantry(values: any){
+  newPantry(values: any) {
     let pantry = new Pantry();
     pantry.description = values['description'];
     pantry.type = values['type'];
@@ -128,7 +135,7 @@ export class ShowHouseholdPage implements OnInit {
     this.pantry_validation_form.reset();
   }
 
-  setOpen(isOpen: Boolean){
+  setOpen(isOpen: Boolean) {
     this.isModalOpen = isOpen;
   }
 

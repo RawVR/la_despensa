@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>Login</ion-title>
+    <ion-title>{{ 'LOGIN_TITTLE' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -8,22 +8,26 @@
   <form [formGroup]="login_validation_form">
     <ion-card>
       <ion-item>
-        <ion-label position="floating">Email</ion-label>
+        <ion-label position="floating">{{ 'EMAIL' | translate }}</ion-label>
         <ion-input type="text" formControlName="email"></ion-input>
       </ion-item>
       <ion-item>
-        <ion-label position="floating">Password</ion-label>
+        <ion-label position="floating">{{ "PASSWORD" | translate }}</ion-label>
         <ion-input type="password" formControlName="password"></ion-input>
       </ion-item>
     </ion-card>
     <ion-row>
       <ion-col>
-        <ion-button type="submit" (click)="onLogin(login_validation_form.value)" expand="block" [disabled]="login_validation_form.valid">Login</ion-button>
+        <ion-button type="submit" (click)="onLogin(login_validation_form.value)" expand="block" [disabled]="!login_validation_form.valid">{{ 'LOGIN' | translate }}</ion-button>
       </ion-col>
     </ion-row>
+    <div class="ion-text-center">
+      {{ 'OR' | translate }}
+    </div>
+    <div id="firebaseui-auth-container"></div>
     <ion-row>
       <ion-col>
-        <ion-button type="submit" color="danger" (click)="onLoginGoogle()" expand="block">Login with Google
+        <ion-button type="submit" color="danger" (click)="onLoginGoogle()" expand="block">{{ 'LOGIN_GOOGLE' | translate }}
         </ion-button>
       </ion-col>
     </ion-row>
@@ -31,14 +35,14 @@
   <ion-row>
     <ion-col>
       <p class="ion-text-end">
-        <a routerLink="/forgot-password">Forgot password? </a>
+        <a routerLink="/forgot-password">{{ 'FORGOT_PASSWORD' | translate }} </a>
       </p>
       <p class="ion-text-end">
-        <a routerLink="/register">Create an account </a>
+        <a routerLink="/register">{{ 'CREATE_ACCOUNT' | translate }} </a>
       </p>
     </ion-col>
   </ion-row>
-  <ion-modal [isOpen]="isModalOpen">
+  <!-- <ion-modal [isOpen]="isModalOpen">
     <ng-template>
       <ion-header>
         <ion-toolbar>
@@ -61,5 +65,5 @@
         </form>
       </ion-content>
     </ng-template>
-  </ion-modal>
+  </ion-modal> -->
 </ion-content>

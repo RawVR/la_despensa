@@ -1,13 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { LoginPageRoutingModule } from './login-routing.module';
+import { SettingsPageRoutingModule } from './settings-routing.module';
 
-import { LoginPage } from './login.page';
-
+import { SettingsPage } from './settings.page';
 import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
@@ -15,10 +14,9 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule,
     FormsModule,
     IonicModule,
-    LoginPageRoutingModule,
-    ReactiveFormsModule,
+    SettingsPageRoutingModule,
     TranslateModule
   ],
-  declarations: [LoginPage]
+  declarations: [SettingsPage]
 })
-export class LoginPageModule {}
+export class SettingsPageModule {}

@@ -39,6 +39,10 @@ const routes: Routes = [
     path: 'show-household-foods',
     loadChildren: () => import('./show-household-foods/show-household-foods.module').then( m => m.ShowHouseholdFoodsPageModule)
   },
+  {
+    path: 'settings',
+    loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
+  },
 ];
 
 @NgModule({

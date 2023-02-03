@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ModalController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-service';
 import { User } from '../modelo/user';
@@ -16,7 +17,12 @@ export class RegisterPage implements OnInit {
   usuario: User;
 
   constructor(public router: Router, private authService: FirebaseAuthService, public formBuilder: FormBuilder,
-    public modalCtrl: ModalController, public firebaseService: FireServiceProvider) {
+    public modalCtrl: ModalController, public firebaseService: FireServiceProvider, public translate: TranslateService) {
+    let language = localStorage.getItem('language');
+    this.translate.setDefaultLang('en');
+    if (language) {
+      this.translate.use(language);
+    }
   }
 
   ngOnInit() {

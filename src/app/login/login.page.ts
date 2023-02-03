@@ -7,6 +7,7 @@ import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { HomePage } from '../home/home.page';
 import { User } from '../modelo/user';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -21,13 +22,29 @@ export class LoginPage implements OnInit {
   currentUser: any;
 
   constructor(public router: Router, public modalController: ModalController, public formBuilder: FormBuilder,
-    public navCtrl: NavController, private authService: FirebaseAuthService, private firebaseService: FireServiceProvider) {
+    public navCtrl: NavController, private authService: FirebaseAuthService, private firebaseService: FireServiceProvider,
+    public translate: TranslateService) {
+    this.translate.addLangs(['es', 'en']);
+    this.translate.setDefaultLang('en');
+    let language = window.navigator.language.substring(0, 2);
+    if (language != "es" && language != "en") {
+      language = 'en';
+    }
+    if (localStorage.getItem('language')) {
+      let language = localStorage.getItem('language');
+      if (language){
+        this.translate.use(language);
+      }
+    } else {
+      localStorage.setItem('language', language);
+      this.translate.use(language);
+    }
   }
 
   ngOnInit() {
     this.login_validation_form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-zA-ZñáéíóúÁÉÍÓÚ0-9_.+-]+[@]{1}[a-zA-ZÑáéíóúÁÉÍÓÚ0-9-]+[.]{1}[a-zA-Z]+$'),
+        Validators.pattern('^[a-zñA-ZÑáéíóúÁÉÍÓÚ0-9_.+-]+[@]{1}[a-zñA-ZÑáéíóúÁÉÍÓÚ0-9-]+[.]{1}[a-zA-Z]+$'),
         Validators.required
       ])),
       password: new FormControl('', Validators.compose([
@@ -40,13 +57,13 @@ export class LoginPage implements OnInit {
 
     this.account_validation_form = this.formBuilder.group({
       name: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-z A-ZñáéíóúÁÉÍÓÚ]+$'),
+        Validators.pattern('^[a-zñ A-ZÑáéíóúÁÉÍÓÚ]+$'),
         Validators.maxLength(32),
         Validators.minLength(1),
         Validators.required
       ])),
       last_names: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-z A-ZñáéíóúÁÉÍÓÚ]+$'),
+        Validators.pattern('^[a-zñ A-ZÑáéíóúÁÉÍÓÚ]+$'),
         Validators.maxLength(32),
         Validators.minLength(1),
         Validators.required
@@ -55,8 +72,8 @@ export class LoginPage implements OnInit {
   }
 
   async onLogin(values: any) {
-    //this.authService.logInUser(values["email"], values["password"]) <--------------------
-    this.authService.logInUser("rawkvr@gmail.com", "12345678")
+    this.authService.logInUser(values["email"], values["password"])
+    //this.authService.logInUser("rawkvr@gmail.com", "12345678")
       .then(async (user) => {
         if (this.authService.isEmailVerified(user)) {
           await this.firebaseService.getUser(user.uid).then((data) => {
@@ -77,11 +94,9 @@ export class LoginPage implements OnInit {
   }
 
   async onLoginGoogle() {
-    this.authService.logInUserGoogle().then((user) => {
-      if (this.authService.isEmailVerified(user)) {
-        this.router.navigate(['households']);
-      } else {
-        console.log("¡El email no está verificado!");
+    await this.authService.logInUserWithGoogle().then(result => {
+      if (result){
+        this.navCtrl.navigateForward('households');
       }
     }).catch(() => {
       console.log("¡Error!")

@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-scanner';
 import { MenuController, ToastController } from '@ionic/angular';
+import { TranslateService } from '@ngx-translate/core';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { Food } from '../modelo/food';
 import { Household } from '../modelo/household';
@@ -28,7 +29,8 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   scanningBarcode: Boolean;
 
   constructor(private toastController: ToastController, private menuCtrl: MenuController,
-    public formBuilder: FormBuilder, private firebaseService: FireServiceProvider) {
+    public formBuilder: FormBuilder, private firebaseService: FireServiceProvider,
+    public translate: TranslateService) {
     this.user = new User();
     this.household = new Household();
     this.pantry = new Pantry();
@@ -37,6 +39,12 @@ export class ShowPantryPage implements OnInit, OnDestroy {
     this.isModalOpen = false;
     this.isCreator = false;
     this.scanningBarcode = false;
+
+    let language = localStorage.getItem('language');
+    this.translate.setDefaultLang('en');
+    if (language) {
+      this.translate.use(language);
+    }
   }
 
   ngOnInit() {
@@ -126,7 +134,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.scanningBarcode){
+    if (this.scanningBarcode) {
       this.stopScan();
     }
   }
@@ -138,7 +146,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   addFood(values: any) {
     let food = values['food'];
     food.expiration = new Date(values['expiration']);
-    if (values['description'] != null && values['description'] != ""){
+    if (values['description'] != null && values['description'] != "") {
       food.description = values['description'];
     }
     food.quantity = values['quantity'];
@@ -254,7 +262,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
             break;
           case 1:
             this.household.foods.forEach(food => {
-              console.log(food.barCode+ " vs " + result.content);
+              console.log(food.barCode + " vs " + result.content);
               if (food.barCode == result.content) {
                 this.addFood_validation_form.patchValue({ food: food });
               }
@@ -307,7 +315,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
       this.typeModal = "buttons";
     } else {
       this.typeModal = "";
-      if (!this.scanningBarcode){
+      if (!this.scanningBarcode) {
         this.selectedFood = "";
         this.food_validation_form.reset();
       }

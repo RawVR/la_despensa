@@ -19,12 +19,40 @@ import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-ser
 import { BarcodeScanner } from '@capacitor-community/barcode-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
 
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
+
 @NgModule({
-  declarations: [AppComponent],entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), AppRoutingModule, AngularFireModule.initializeApp(environment.firebaseConfig),
-  AngularFireAuthModule, AngularFireStorageModule, AngularFirestoreModule, AngularFireDatabaseModule, QRCodeModule],
-  providers: [FireServiceProvider, FirebaseAuthService, { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  declarations: [AppComponent], entryComponents: [],
+  imports: [
+    BrowserModule,
+    IonicModule.forRoot(),
+    AppRoutingModule,
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    AngularFireStorageModule,
+    AngularFirestoreModule,
+    AngularFireDatabaseModule,
+    QRCodeModule,
+    HttpClientModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })
+  ],
+  providers: [
+    FireServiceProvider,
+    FirebaseAuthService,
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
   bootstrap: [AppComponent],
 })
 
-export class AppModule {}
+export class AppModule { }

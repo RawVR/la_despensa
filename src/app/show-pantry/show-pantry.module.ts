@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ShowPantryPageRoutingModule } from './show-pantry-routing.module';
 
 import { ShowPantryPage } from './show-pantry.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -14,7 +15,8 @@ import { ShowPantryPage } from './show-pantry.page';
     FormsModule,
     IonicModule,
     ShowPantryPageRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   declarations: [ShowPantryPage]
 })

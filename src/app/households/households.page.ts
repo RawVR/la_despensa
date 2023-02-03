@@ -8,6 +8,7 @@ import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { Household } from '../modelo/household';
 import { User } from '../modelo/user';
 import { exists } from 'fs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-households',
@@ -26,10 +27,17 @@ export class HouseholdsPage implements OnInit, OnDestroy {
 
   constructor(private router: Router, private alertCtrl: AlertController, private navCtrl: NavController,
     public formBuilder: FormBuilder, private firebaseService: FireServiceProvider, private toastController: ToastController,
-    angularQRModule: QRCodeModule) {
+    angularQRModule: QRCodeModule, public translate: TranslateService) {
     this.user = new User();
     this.isModalOpen = false;
     this.scanningQR = false;
+
+    let language = localStorage.getItem('language');
+    this.translate.setDefaultLang('en');
+    if (language) {
+      this.translate.use(language);
+    }
+    
   }
 
   ngOnInit() {
@@ -57,7 +65,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.scanningQR){
+    if (this.scanningQR) {
       this.stopScan();
     }
   }
