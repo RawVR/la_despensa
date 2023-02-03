@@ -82,7 +82,7 @@ export class LoginPage implements OnInit {
           if (this.currentUser.nombre == "") {
             this.setOpenModal(true);
           } else {
-            localStorage.setItem('user.id', this.currentUser.id)
+            localStorage.setItem('user.id', this.currentUser.id);
             this.navCtrl.navigateForward('households');
           }
         } else {
@@ -94,7 +94,7 @@ export class LoginPage implements OnInit {
   }
 
   async onLoginGoogle() {
-    await this.authService.logInUserWithGoogle().then(result => {
+    await this.authService.logInUserGoogle().then(result => {
       if (result){
         this.navCtrl.navigateForward('households');
       }

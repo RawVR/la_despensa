@@ -21,11 +21,11 @@
         <ion-button type="submit" (click)="onLogin(login_validation_form.value)" expand="block" [disabled]="!login_validation_form.valid">{{ 'LOGIN' | translate }}</ion-button>
       </ion-col>
     </ion-row>
-    <div class="ion-text-center">
+    <div class="ion-text-center" *ngIf="false">
       {{ 'OR' | translate }}
     </div>
     <div id="firebaseui-auth-container"></div>
-    <ion-row>
+    <ion-row *ngIf="false">
       <ion-col>
         <ion-button type="submit" color="danger" (click)="onLoginGoogle()" expand="block">{{ 'LOGIN_GOOGLE' | translate }}
         </ion-button>
