@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-service';
-import { IonModal, ModalController, NavController } from '@ionic/angular';
+import { IonModal, ModalController, NavController, ToastController } from '@ionic/angular';
 
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
@@ -22,8 +22,8 @@ export class LoginPage implements OnInit {
   currentUser: any;
 
   constructor(public router: Router, public modalController: ModalController, public formBuilder: FormBuilder,
-    public navCtrl: NavController, private authService: FirebaseAuthService, private firebaseService: FireServiceProvider,
-    public translate: TranslateService) {
+    private toastController: ToastController, public navCtrl: NavController, private authService: FirebaseAuthService,
+    private firebaseService: FireServiceProvider, public translate: TranslateService) {
     this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang('en');
     let language = window.navigator.language.substring(0, 2);
@@ -79,14 +79,19 @@ export class LoginPage implements OnInit {
           await this.firebaseService.getUser(user.uid).then((data) => {
             this.currentUser = data;
           });
-          if (this.currentUser.nombre == "") {
+          if (this.currentUser.first_name == "") {
             this.setOpenModal(true);
           } else {
             localStorage.setItem('user.id', this.currentUser.id);
             this.navCtrl.navigateForward('households');
           }
         } else {
-          console.log("¡El email no está verificado!");
+          const toast = await this.toastController.create({
+            message: this.translate.instant('EMAIL_ERROR_VERIFICATION'),
+            duration: 1500,
+            icon: 'qr-code'
+          });
+          await toast.present();
         }
       }).catch(() => {
         console.log("¡Error!")
@@ -108,8 +113,8 @@ export class LoginPage implements OnInit {
   }
 
   async confirm(values: any) {
-    this.currentUser.nombre = values["name"];
-    this.currentUser.apellidos = values["last_names"];
+    this.currentUser.first_name = values["first_name"];
+    this.currentUser.last_names = values["last_names"];
     this.setOpenModal(false);
     console.log(this.currentUser);
     this.firebaseService.updateUser(this.currentUser);

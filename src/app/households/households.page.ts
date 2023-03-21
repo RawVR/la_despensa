@@ -37,7 +37,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
     if (language) {
       this.translate.use(language);
     }
-    
+
   }
 
   ngOnInit() {
@@ -92,22 +92,23 @@ export class HouseholdsPage implements OnInit, OnDestroy {
 
   async deleteHousehold(index: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Eliminar el hogar',
-      message: "¿Está seguro de eliminar el hogar " + this.households[index].description + " permanentemente?",
+      header: this.translate.instant('DELETE_HOUSEHOLD_HEADER'),
+      message: this.translate.instant('DELETE_HOUSEHOLD_MESSAGE') + this.households[index].description + '?',
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.translate.instant('DELETE_HOUSEHOLD_BUTTON_CANCEL'),
           handler: () => {
           }
         },
         {
-          text: 'Eliminar',
+          text: this.translate.instant('DELETE_HOUSEHOLD_BUTTON_DELETE'),
           handler: () => {
             this.firebaseService.deleteHousehold(this.user.id, this.households[index].id)
               .then(async (deleted) => {
                 if (deleted) {
                   const toast = await this.toastController.create({
-                    message: '¡Hogar ' + this.households[index].description + ' eliminado correctamente!',
+                    message: this.translate.instant('DELETE_HOUSEHOLD_DELETE_TOAST_MESSAGE1') + this.households[index].description +
+                      this.translate.instant('DELETE_HOUSEHOLD_DELETE_TOAST_MESSAGE2'),
                     duration: 1500,
                     icon: 'trash'
                   });
@@ -115,7 +116,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
                   this.households.splice(index, 1);
                 } else {
                   const toast = await this.toastController.create({
-                    message: '¡Error al eliminar el hogar ' + this.households[index].description + '!',
+                    message: this.translate.instant('DELETE_HOUSEHOLD_ERROR_TOAST_MESSAGE') + this.households[index].description + '!',
                     duration: 1500,
                     icon: 'trash'
                   });
@@ -135,7 +136,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
       this.startScan();
     } catch (error) {
       const toast = await this.toastController.create({
-        message: 'Error: ' + error,
+        message: this.translate.instant('LINK_HOUSEHOLD_ERROR_TOAST_MESSAGE') + error,
         duration: 5000,
         icon: 'qr-code'
       });
@@ -145,22 +146,23 @@ export class HouseholdsPage implements OnInit, OnDestroy {
 
   async unlinkHousehold(index: number) {
     const alert = await this.alertCtrl.create({
-      header: 'Desvincularse del hogar',
-      message: "¿Está seguro de desvincularte del hogar " + this.households[index].description + "?",
+      header: this.translate.instant('UNLINK_HOUSEHOLD_HEADER'),
+      message: this.translate.instant('UNLINK_HOUSEHOLD_MESSAGE') + this.households[index].description + "?",
       buttons: [
         {
-          text: 'Cancelar',
+          text: this.translate.instant('UNLINK_HOUSEHOLD_BUTTON_CANCEL'),
           handler: () => {
           }
         },
         {
-          text: 'Desvincular',
+          text: this.translate.instant('UNLINK_HOUSEHOLD_BUTTON_UNLINK'),
           handler: () => {
             this.firebaseService.unlinkHousehold(this.user.id, this.households[index].id)
               .then(async (unlinked) => {
                 if (unlinked) {
                   const toast = await this.toastController.create({
-                    message: '¡Hogar ' + this.households[index].description + ' desvinculado correctamente!',
+                    message: this.translate.instant('UNLINK_HOUSEHOLD_DELETE_TOAST_MESSAGE1') + this.households[index].description +
+                    this.translate.instant('UNLINK_HOUSEHOLD_DELETE_TOAST_MESSAGE2'),
                     duration: 1500,
                     icon: 'qr-code'
                   });
@@ -168,7 +170,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
                   this.households.splice(index, 1);
                 } else {
                   const toast = await this.toastController.create({
-                    message: '¡Error al desvincularse del hogar ' + this.households[index].description + '!',
+                    message: this.translate.instant('UNLINK_HOUSEHOLD_ERROR_TOAST_MESSAGE') + this.households[index].description + '!',
                     duration: 1500,
                     icon: 'qr-code'
                   });
@@ -198,7 +200,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
       return true;
     }
     if (status.denied || status.neverAsked) {
-      const c = confirm('Por favor, entre en Permisos de la aplicación y permita el acceso a la cámara para leer los códigos QR');
+      const c = confirm(this.translate.instant('DELETE_HOUSEHOLD_MESSAGE'));
       this.scanningQR = false;
       if (c) {
         BarcodeScanner.openAppSettings();
@@ -233,7 +235,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
       const result = await BarcodeScanner.startScan({ targetedFormats: [SupportedFormat.QR_CODE] });
       if (result?.hasContent) {
         const toast = await this.toastController.create({
-          message: 'QR: ' + result.content,
+          message: this.translate.instant('QR') + result.content,
           duration: 1500,
           icon: 'qr-code'
         });
@@ -247,7 +249,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
         }
       } else {
         const toast = await this.toastController.create({
-          message: '¡Error al leer el QR!',
+          message: this.translate.instant('CHECK_PERMISSION'),
           duration: 1500,
           icon: 'qr-code'
         });
@@ -255,12 +257,11 @@ export class HouseholdsPage implements OnInit, OnDestroy {
       }
     } catch (error) {
       const toast = await this.toastController.create({
-        message: '¡Error al leer el QR!',
+        message: this.translate.instant('SCAN_ERROR'),
         duration: 1500,
         icon: 'qr-code'
       });
       await toast.present();
-      console.log("Error:", error);
       this.stopScan();
     }
   }

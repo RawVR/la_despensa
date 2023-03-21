@@ -42,28 +42,30 @@
       </p>
     </ion-col>
   </ion-row>
-  <!-- <ion-modal [isOpen]="isModalOpen">
+  <ion-modal [isOpen]="isModalOpen">
     <ng-template>
       <ion-header>
         <ion-toolbar>
-          <ion-title>Welcome</ion-title>
+          <ion-title>{{ 'WELCOME' | translate }}</ion-title>
           <ion-buttons slot="end">
-            <ion-button (click)="confirm(account_validation_form.value)" [strong]="true" [disabled]="!account_validation_form.valid">Confirmar</ion-button>
+            <ion-button (click)="confirm(account_validation_form.value)" [strong]="true" [disabled]="!account_validation_form.valid">
+              {{ 'CONFIRM' | translate }}
+            </ion-button>
           </ion-buttons>
         </ion-toolbar>
       </ion-header>
       <ion-content class="ion-padding">    
         <form [formGroup]="account_validation_form">
           <ion-item>
-            <ion-label position="floating">Nombre</ion-label>
-            <ion-input type="text" placeholder="Introduce tu nombre" formControlName="name"></ion-input>
+            <ion-label position="floating">{{ "FIRST_NAME" | translate }}</ion-label>
+            <ion-input type="text" placeholder="{{ 'FIRST_NAME_PLACEHOLDER' | translate }}" formControlName="first_name"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label position="floating">Apellidos</ion-label>
-            <ion-input type="text" placeholder="Introduce tus apellidos" formControlName="last_names"></ion-input>
+            <ion-label position="floating">{{ "LAST_NAMES" | translate }}</ion-label>
+            <ion-input type="text" placeholder="{{ 'LAST_NAMES_PLACEHOLDER' | translate }}" formControlName="last_names"></ion-input>
           </ion-item>
         </form>
       </ion-content>
     </ng-template>
-  </ion-modal> -->
+  </ion-modal>
 </ion-content>

@@ -48,6 +48,20 @@
 
   <ion-content [fullscreen]="true">
     
+    <!-- Mostrar listas de la compra -->
+    
+    <ion-item>
+      <ion-label>
+        {{ "WITHOUT_ACTIVE_LIST" | translate }}
+      </ion-label>
+    </ion-item>
+    
+    <!-- Historial de compras -->
+    <ion-item color="primary">
+      <ion-label>
+        {{ "PURCHASE_HISTORY" | translate }}
+      </ion-label>
+    </ion-item>
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
