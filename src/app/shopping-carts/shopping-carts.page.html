@@ -49,12 +49,28 @@
   <ion-content [fullscreen]="true">
     
     <!-- Mostrar listas de la compra -->
-    
     <ion-item>
       <ion-label>
         {{ "WITHOUT_ACTIVE_LIST" | translate }}
       </ion-label>
     </ion-item>
+    <div>
+      <ion-item-sliding *ngFor="let shoppingCart of shoppingCarts; index as i">
+        <ion-item>
+          {{shoppingCart.description}}
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="dark" (click)="showShoppingCart(i)">
+            <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+          </ion-item-option>
+          <ion-item-option color="danger" (click)="deleteShoppingCart(i)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+    
     
     <!-- Historial de compras -->
     <ion-item color="primary">
@@ -62,6 +78,32 @@
         {{ "PURCHASE_HISTORY" | translate }}
       </ion-label>
     </ion-item>
+
+    <ion-modal [isOpen]="isModalOpen">
+      <ng-template>
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button (click)="setOpen(false)">
+                <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+            <ion-title>{{ "NEW_SHOPPING_CART" | translate }}</ion-title>
+            <ion-buttons slot="end">
+              <ion-button (click)="newShoppingCart(shopping_cart_validation_form.value)" [strong]="true" [disabled]="!shopping_cart_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+        <ion-content class="ion-padding">
+          <form [formGroup]="shopping_cart_validation_form">
+            <ion-item>
+              <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
+              <ion-input type="text" placeholder="Descripción de la lista de la compra" formControlName="description"></ion-input>
+            </ion-item>
+          </form>
+        </ion-content>
+      </ng-template>
+    </ion-modal>
     <ion-refresher slot="fixed" (ionRefresh)="handleRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>

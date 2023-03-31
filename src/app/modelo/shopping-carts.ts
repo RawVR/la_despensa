@@ -1,6 +1,6 @@
 import { Food } from "./food";
 
-export class ShoppingCarts {
+export class ShoppingCart {
     public id: string;
     public description: string;
     public supermarket: string;
@@ -9,18 +9,18 @@ export class ShoppingCarts {
     constructor() {
     }
 
-    public static createFromJsonObject(jsonObject: any): ShoppingCarts {
-        let shoppingCarts: ShoppingCarts = new ShoppingCarts();
-        shoppingCarts.id = jsonObject["id"];
-        shoppingCarts.description = jsonObject["description"];
-        shoppingCarts.supermarket = jsonObject["supermarket"];
+    public static createFromJsonObject(jsonObject: any): ShoppingCart {
+        let shoppingCart: ShoppingCart = new ShoppingCart();
+        shoppingCart.id = jsonObject["id"];
+        shoppingCart.description = jsonObject["description"];
+        shoppingCart.supermarket = jsonObject["supermarket"];
         if (jsonObject["foods"] != null) {
-            shoppingCarts.foods = new Array<Food>();
+            shoppingCart.foods = new Array<Food>();
             jsonObject["users"].forEach((foodJson: any) => {
-                shoppingCarts.foods.push(Food.createFromJsonObject(foodJson));
+                shoppingCart.foods.push(Food.createFromJsonObject(foodJson));
             });
         }
 
-        return shoppingCarts;
+        return shoppingCart;
     }
 }

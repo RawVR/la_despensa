@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { Household } from 'src/app/modelo/household';
 import { User } from 'src/app/modelo/user';
 import { Pantry } from 'src/app/modelo/pantry';
+import { ShoppingCart } from 'src/app/modelo/shopping-carts';
 
 
 @Injectable({
@@ -113,10 +114,10 @@ export class FireServiceProvider {
                         });
                 }
             })
-            .catch((error: Error) => {
-                console.log(error.message);
-                reject(error.message);
-            });
+                .catch((error: Error) => {
+                    console.log(error.message);
+                    reject(error.message);
+                });
         });
         return promise;
     }
@@ -133,10 +134,10 @@ export class FireServiceProvider {
                     resolve(true);
                 }
             })
-            .catch((error: Error) => {
-                console.log(error.message);
-                reject(error.message);
-            });
+                .catch((error: Error) => {
+                    console.log(error.message);
+                    reject(error.message);
+                });
         });
         return promise;
     }
@@ -261,6 +262,141 @@ export class FireServiceProvider {
                 .catch((error: Error) => {
                     reject(error.message);
                 })
+        });
+        return promise;
+    }
+    //#endregion
+
+    //#region ShoppingCarts
+    getShoppingCart(ShoppingCartID: string): Promise<ShoppingCart> {
+        let promise = new Promise<ShoppingCart>((resolve, reject) => {
+            const shoppingCartRef = this.angularFirestore.collection("shoppingCart").ref.doc(ShoppingCartID).get().then((data: any) => {
+                if (data.exists) {
+                    let shoppingCartJson = data.data();
+                    let shoppingCart = ShoppingCart.createFromJsonObject(shoppingCartJson);
+                    resolve(shoppingCart);
+                }
+            }).catch((error: Error) => {
+                reject(error.message);
+            });
+        });
+        return promise;
+    }
+
+    async getShoppingCarts(ShoppingCartID: string): Promise<ShoppingCart[]> {
+        let promise = new Promise<ShoppingCart[]>(async (resolve, reject) => {
+            const shoppingCartRef = this.angularFirestore.collection('shoppingCart');
+            const snapshot = await shoppingCartRef.ref.where('shoppingCart', '==', ShoppingCartID).get()
+                .then((data: any) => {
+                    let shoppingCarts = new Array<ShoppingCart>();
+                    data.forEach((element: { data: () => any; }) => {
+                        let shoppingCartJson = element.data();
+                        let shoppingCart = ShoppingCart.createFromJsonObject(shoppingCartJson);
+                        shoppingCarts.push(shoppingCart);
+                    });
+                    resolve(shoppingCarts);
+                })
+                .catch((error: Error) => {
+                    reject(error.message);
+                });
+        });
+        return promise;
+    }
+
+    insertShoppingCart(dataNewShoppingCart: ShoppingCart): Promise<ShoppingCart> {
+        let promise = new Promise<ShoppingCart>((resolve, reject) => {
+            dataNewShoppingCart.id = this.angularFirestore.collection("shoppingCarts").ref.doc().id;
+            this.angularFirestore.collection("shoppingCarts").doc(dataNewShoppingCart.id)
+                .set(JSON.parse(JSON.stringify(dataNewShoppingCart)))
+                .catch((error: Error) => {
+                    reject(error.message);
+                });
+        });
+        return promise;
+    }
+
+    deleteShoppingCart(shoppingCartID: any): Promise<Boolean> {
+        let promise = new Promise<Boolean>((resolve, reject) => {
+            this.angularFirestore.collection('shoppingCarts').doc(shoppingCartID).delete().then(
+                (data: any) => {
+                    console.log(data)
+                    resolve(true);
+                })
+                .catch((error: Error) => {
+                    console.log(error.message);
+                    reject(error.message);
+                });
+        });
+        return promise;
+    }
+
+    shoppingCartPurchased(dataShoppingCart: ShoppingCart): Promise<Boolean> {
+        let promise = new Promise<Boolean>((resolve, reject) => {
+            this.deleteShoppingCart(dataShoppingCart.id)
+                .then(async (deleted) => {
+                    this.insertShoppingCartHistory(dataShoppingCart);
+                });
+        });
+        return promise;
+    }
+
+    getShoppingCartHistory(ShoppingCartID: string): Promise<ShoppingCart> {
+        let promise = new Promise<ShoppingCart>((resolve, reject) => {
+            const shoppingCartRef = this.angularFirestore.collection("shoppingCartHistory").ref.doc(ShoppingCartID).get().then((data: any) => {
+                if (data.exists) {
+                    let shoppingCartJson = data.data();
+                    let shoppingCart = ShoppingCart.createFromJsonObject(shoppingCartJson);
+                    resolve(shoppingCart);
+                }
+            }).catch((error: Error) => {
+                reject(error.message);
+            });
+        });
+        return promise;
+    }
+
+    async getShoppingCartsHistory(ShoppingCartID: string): Promise<ShoppingCart[]> {
+        let promise = new Promise<ShoppingCart[]>(async (resolve, reject) => {
+            const shoppingCartRef = this.angularFirestore.collection('shoppingCartHistory');
+            const snapshot = await shoppingCartRef.ref.where('shoppingCart', '==', ShoppingCartID).get()
+                .then((data: any) => {
+                    let shoppingCarts = new Array<ShoppingCart>();
+                    data.forEach((element: { data: () => any; }) => {
+                        let shoppingCartJson = element.data();
+                        let shoppingCart = ShoppingCart.createFromJsonObject(shoppingCartJson);
+                        shoppingCarts.push(shoppingCart);
+                    });
+                    resolve(shoppingCarts);
+                })
+                .catch((error: Error) => {
+                    reject(error.message);
+                });
+        });
+        return promise;
+    }
+
+    insertShoppingCartHistory(dataNewShoppingCart: ShoppingCart): Promise<ShoppingCart> {
+        let promise = new Promise<ShoppingCart>((resolve, reject) => {
+            this.angularFirestore.collection("shoppingCartHistory").doc(dataNewShoppingCart.id)
+                .set(JSON.parse(JSON.stringify(dataNewShoppingCart)))
+                .catch((error: Error) => {
+                    reject(error.message);
+                });
+        });
+        return promise;
+    }
+
+    deleteShoppingCartHistory(shoppingCartID: any): Promise<Boolean> {
+        let promise = new Promise<Boolean>((resolve, reject) => {
+            this.angularFirestore.collection('shoppingCartHistory').doc(shoppingCartID).delete().then(
+                (data: any) => {
+                    console.log(data)
+                    resolve(true);
+                })
+                .catch((error: Error) => {
+                    console.log(error.message);
+                    reject(error.message);
+                });
         });
         return promise;
     }

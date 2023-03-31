@@ -68,5 +68,6 @@
     "QR": "QR:",
     "EMAIL_ERROR_VERIFICATION": "¡El email no está verificado!",
     "PURCHASE_HISTORY": "Historial de compras",
-    "WITHOUT_ACTIVE_LIST": "¡No hay ninguna lista de la compra activa!"
+    "WITHOUT_ACTIVE_LIST": "¡No hay ninguna lista de la compra activa!",
+    "NEW_SHOPPING_CART": ""
 }

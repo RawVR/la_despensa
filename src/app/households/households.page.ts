@@ -189,7 +189,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
   }
 
   showHousehold(index: number) {
-    localStorage.setItem('household.id', this.households[index].id)
+    localStorage.setItem('household.id', this.households[index].id);
     this.router.navigate(['/show-household']);
   }
 
