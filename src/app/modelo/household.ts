@@ -9,6 +9,9 @@ export class Household {
     public foods: Food[];
 
     constructor() {
+        this.users = [];
+        this.pantries = [];
+        this.foods = [];
     }
 
     public static createFromJsonObject(jsonObject: any): Household {
@@ -21,19 +24,19 @@ export class Household {
             jsonObject["users"].forEach((userID: any) => {
                 household.users.push(userID);
             });
-        }
+        };
         if (jsonObject["pantries"] != null) {
             household.pantries = new Array<string>();
             jsonObject["pantries"].forEach((pantryID: any) => {
                 household.users.push(pantryID);
             });
-        }
+        };
         if (jsonObject["foods"] != null) {
             household.foods = new Array<Food>();
             jsonObject["foods"].forEach((foodJson: any) => {
                 household.foods.push(Food.createFromJsonObject(foodJson));
             });
-        }
+        };
         return household;
     }
 }

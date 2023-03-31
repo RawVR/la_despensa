@@ -69,5 +69,9 @@
     "EMAIL_ERROR_VERIFICATION": "¡El email no está verificado!",
     "PURCHASE_HISTORY": "Historial de compras",
     "WITHOUT_ACTIVE_LIST": "¡No hay ninguna lista de la compra activa!",
-    "NEW_SHOPPING_CART": ""
+    "NEW_SHOPPING_CART": "Nueva lista de la compra",
+    "SUPERMARKET": "Supermercado",
+    "DESCRIPTION_NEW_SHOPPING_CART": "Descripción de la lista de la compra",
+    "SUPERMARKET_NEW_SHOPPING_CART": "Supermercado donde se realizará la compra",
+    "USERS_SHOPPING_CART": "Acompañantes de compras"
 }

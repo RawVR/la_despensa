@@ -36,8 +36,8 @@
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
       <ion-buttons slot="end">
-        <ion-button>
-          <ion-icon slot="icon-only"name="add-outline"></ion-icon>
+        <ion-button (click)="setOpen(true)">
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
       <ion-title>
@@ -47,7 +47,7 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
-    
+
     <!-- Mostrar listas de la compra -->
     <ion-item>
       <ion-label>
@@ -70,8 +70,8 @@
         </ion-item-options>
       </ion-item-sliding>
     </div>
-    
-    
+
+
     <!-- Historial de compras -->
     <ion-item color="primary">
       <ion-label>
@@ -90,7 +90,8 @@
             </ion-buttons>
             <ion-title>{{ "NEW_SHOPPING_CART" | translate }}</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="newShoppingCart(shopping_cart_validation_form.value)" [strong]="true" [disabled]="!shopping_cart_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
+              <ion-button (click)="newShoppingCart(shopping_cart_validation_form.value)" [strong]="true"
+                [disabled]="!shopping_cart_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
@@ -98,8 +99,25 @@
           <form [formGroup]="shopping_cart_validation_form">
             <ion-item>
               <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
-              <ion-input type="text" placeholder="Descripción de la lista de la compra" formControlName="description"></ion-input>
+              <ion-input type="text" placeholder="{{ 'DESCRIPTION_NEW_SHOPPING_CART' | translate }}"
+                formControlName="description"></ion-input>
             </ion-item>
+            <ion-item>
+              <ion-label position="floating">{{ "SUPERMARKET" | translate }}</ion-label>
+              <ion-input type="text" placeholder="{{ 'SUPERMARKET_NEW_SHOPPING_CART' | translate }}"
+                formControlName="supermarket"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-select placeholder="{{ 'USERS_SHOPPING_CART' | translate }}" formControlName="users" multiple="true"
+                cancelText="{{ 'CANCEL' | translate }}" okText="{{ 'Ok' | translate }}">
+                <ng-container *ngFor="let user of users">
+                  <ion-select-option [value]="user.id">
+                    {{ user.first_name }} {{ user.last_names }}
+                  </ion-select-option>
+                </ng-container>
+              </ion-select>
+            </ion-item>
+
           </form>
         </ion-content>
       </ng-template>

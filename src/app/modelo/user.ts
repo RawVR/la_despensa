@@ -8,6 +8,7 @@ export class User implements UserInterface{
     public households: string[];
 
     constructor() {
+        this.households = [];
     }
 
     public static createFromJsonObject(jsonObject: any): User {
@@ -21,8 +22,7 @@ export class User implements UserInterface{
             jsonObject["households"].forEach((householdID: any) => {
                 user.households.push(householdID);
             });
-        }
-
+        };
         return user;
     }
 }

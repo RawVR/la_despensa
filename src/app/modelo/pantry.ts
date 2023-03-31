@@ -8,6 +8,7 @@ export class Pantry {
     public foods: Food[];
 
     constructor() {
+        this.foods = [];
     }
 
     public static createFromJsonObject(jsonObject: any): Pantry {
@@ -21,8 +22,7 @@ export class Pantry {
             jsonObject["foods"].forEach((foodJson: any) => {
                 pantry.foods.push(Food.createFromJsonObject(foodJson));
             });
-        }
-
+        };
         return pantry;
     }
 }
