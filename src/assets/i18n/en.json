@@ -70,5 +70,9 @@
     "PURCHASE_HISTORY": "Purchase history",
     "WITHOUT_ACTIVE_LIST": "There is no active shopping list!",
     "NEW_SHOPPING_CART": "New shopping cart",
-    "SUPERMARKET": "Supermarket"
+    "SUPERMARKET": "Supermarket",
+    "DESCRIPTION_NEW_SHOPPING_CART": "Description of the shopping cart",
+    "SUPERMARKET_NEW_SHOPPING_CART": "Supermarket where the purchase will take place",
+    "USERS_SHOPPING_CART": "Shopping companions",
+    "PURCHASE_DATE": "Purchase date"
 }

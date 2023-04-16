@@ -49,11 +49,13 @@
   <ion-content [fullscreen]="true">
 
     <!-- Mostrar listas de la compra -->
-    <ion-item>
-      <ion-label>
-        {{ "WITHOUT_ACTIVE_LIST" | translate }}
-      </ion-label>
-    </ion-item>
+    <ng-container *ngIf="shoppingCarts.length === 0">
+      <ion-item>
+        <ion-label>
+          {{ "WITHOUT_ACTIVE_LIST" | translate }}
+        </ion-label>
+      </ion-item>
+    </ng-container>    
     <div>
       <ion-item-sliding *ngFor="let shoppingCart of shoppingCarts; index as i">
         <ion-item>
@@ -61,23 +63,49 @@
           <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
         </ion-item>
         <ion-item-options side="end">
-          <ion-item-option color="dark" (click)="showShoppingCart(i)">
+          <ion-item-option color="dark" (click)="showShoppingCart(i, false)">
             <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
           </ion-item-option>
-          <ion-item-option color="danger" (click)="deleteShoppingCart(i)">
+          <ion-item-option color="danger" (click)="deleteShoppingCart(i, false)">
             <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
           </ion-item-option>
         </ion-item-options>
       </ion-item-sliding>
     </div>
 
-
     <!-- Historial de compras -->
     <ion-item color="primary">
       <ion-label>
         {{ "PURCHASE_HISTORY" | translate }}
       </ion-label>
+      <ion-icon slot="end" name="eye-outline" (click)="toggleShowHistory(true)" *ngIf="!showHistory"></ion-icon>
+      <ion-icon slot="end" name="eye-off-outline" (click)="toggleShowHistory(false)" *ngIf="showHistory"></ion-icon>
     </ion-item>
+    <ng-container *ngIf="showHistory">
+      <div>
+        <ion-item-sliding *ngFor="let shoppingCart of shoppingCartsHistory; index as i">
+          <ion-item>
+            <ion-col>
+              <ion-row>
+                <label>{{shoppingCart.description}}</label>
+              </ion-row>
+              <ion-row>
+                <label>{{shoppingCart.getPurchaseDate()}}</label>
+              </ion-row>
+            </ion-col>
+            <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+          </ion-item>
+          <ion-item-options side="end">
+            <ion-item-option color="dark" (click)="showShoppingCart(i, true)">
+              <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+            </ion-item-option>
+            <ion-item-option color="danger" (click)="deleteShoppingCart(i, true)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+        </ion-item-sliding>
+      </div>
+    </ng-container>
 
     <ion-modal [isOpen]="isModalOpen">
       <ng-template>
@@ -107,6 +135,15 @@
               <ion-input type="text" placeholder="{{ 'SUPERMARKET_NEW_SHOPPING_CART' | translate }}"
                 formControlName="supermarket"></ion-input>
             </ion-item>
+            <ion-item>
+              <ion-label>{{ "PURCHASE_DATE" | translate }}</ion-label>
+              <ion-datetime-button datetime="datetime"></ion-datetime-button>
+            </ion-item>
+            <ion-modal [keepContentsMounted]="true">
+              <ng-template>
+                <ion-datetime id="purchaseDate" formControlName="purchase_date"></ion-datetime>
+              </ng-template>
+            </ion-modal>
             <ion-item>
               <ion-select placeholder="{{ 'USERS_SHOPPING_CART' | translate }}" formControlName="users" multiple="true"
                 cancelText="{{ 'CANCEL' | translate }}" okText="{{ 'Ok' | translate }}">

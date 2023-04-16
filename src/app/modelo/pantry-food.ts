@@ -1,18 +1,16 @@
-export class Food {
-    public name: string;
+import { PatternFood } from "./pattern-food";
+
+export class PantryFood extends PatternFood{
     public description: string;
     public quantity: number;
-    public category: string;
     public expiration: Date;
-    public barCode: string;
-    public tags: string[]
 
     constructor() {
-        this.tags = [];
+        super();
     }
 
-    public static createFromJsonObject(jsonObject: any): Food {
-        let food: Food = new Food();
+    public static override createFromJsonObject(jsonObject: any): PantryFood {
+        let food: PantryFood = new PantryFood();
         food.name = jsonObject["name"],
         food.description = jsonObject["description"],
         food.quantity = jsonObject["quantity"],

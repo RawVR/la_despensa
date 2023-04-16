@@ -8,6 +8,7 @@ import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-ser
 import { Household } from '../modelo/household';
 import { ShoppingCart } from '../modelo/shopping-carts';
 import { User } from '../modelo/user';
+import { log } from 'console';
 
 @Component({
   selector: 'app-shopping-carts',
@@ -20,7 +21,9 @@ export class ShoppingCartsPage implements OnInit {
   isModalOpen: Boolean;
   shoppingCart: ShoppingCart;
   shoppingCarts: ShoppingCart[];
+  shoppingCartsHistory: ShoppingCart[];
   userSelected: User;
+  showHistory: Boolean;
   users: User[];
   user: User;
 
@@ -30,8 +33,19 @@ export class ShoppingCartsPage implements OnInit {
     private authService: FirebaseAuthService, private firebaseService: FireServiceProvider,
     public translate: TranslateService, public formBuilder: FormBuilder) {
     this.user = new User();
+    this.shoppingCarts = [];
     this.isModalOpen = false;
-
+    if (localStorage.getItem('showHistory') != null){
+      let showHistory = localStorage.getItem('showHistory');
+      if (localStorage.getItem('showHistory') == "true"){
+        this.showHistory = true;
+      } else {
+        this.showHistory = false;
+      }
+    } else {
+      localStorage.setItem('showHistory', "true")
+      this.showHistory = true;
+    }
     let language = localStorage.getItem('language');
     this.translate.setDefaultLang('en');
     if (language) {
@@ -45,10 +59,7 @@ export class ShoppingCartsPage implements OnInit {
       this.firebaseService.getUser(userID).then((data) => {
         this.user = data;
         this.users = [];
-        this.firebaseService.getShoppingCarts(this.user.id).then((data) => {
-          this.shoppingCarts = [];
-          this.shoppingCarts = data;
-        });
+        this.getShoppingCarts();
       });
     }
 
@@ -65,26 +76,53 @@ export class ShoppingCartsPage implements OnInit {
         Validators.maxLength(32),
         Validators.required
       ])),
-      users: new FormControl('', Validators.required)
+      purchase_date: new FormControl(''),
+      users: new FormControl('')
     });
   }
 
   newShoppingCart(values: any) {
-    let shoppingCarts = new ShoppingCart();
-    shoppingCarts.description = values['description'];
-    shoppingCarts.supermarket = values['supermarket'];
-    this.firebaseService.insertShoppingCart(shoppingCarts, this.user.id);
+    let shoppingCart = new ShoppingCart();
+    shoppingCart.description = values['description'];
+    shoppingCart.supermarket = values['supermarket'];
+    shoppingCart.purchaseDate = values["purchaseDate"];
+    shoppingCart.users.push(this.user.id);
+    if (values['users'] != null){
+      values['users'].forEach((value: any) => {
+        shoppingCart.users.push(value);
+      });
+    }
+    this.firebaseService.insertShoppingCart(shoppingCart, this.user.id).then(() => {
+      this.shoppingCarts.push(this.shoppingCart);
+      this.sortShoppingCarts();
+    });
     this.setOpen(false);
     this.shopping_cart_validation_form.reset();
   }
 
-  showShoppingCart(index: number) {
-    localStorage.setItem('shoppingCart.id', this.shoppingCarts[index].id)
+  showShoppingCart(index: number, history: Boolean) {
+    if (history){
+      localStorage.setItem('shoppingCart.id', this.shoppingCartsHistory[index].id);
+    } else {
+      localStorage.setItem('shoppingCart.id', this.shoppingCarts[index].id);
+    }
     this.router.navigate(['/show-shopping-cart']);
   }
 
-  deleteShoppingCart(index: number) {
-    this.firebaseService.deleteShoppingCart(this.shoppingCarts[index]);
+  deleteShoppingCart(index: number, history: Boolean) {
+    if (history){
+      this.firebaseService.deleteShoppingCart(this.shoppingCartsHistory[index].id).then((deleted) => {
+        if (deleted){
+          this.shoppingCartsHistory.splice(index, 1);
+        }
+      });
+    } else {
+      this.firebaseService.deleteShoppingCart(this.shoppingCarts[index].id).then((deleted) => {
+        if (deleted){
+          this.shoppingCarts.splice(index, 1);
+        }
+      });;
+    }
   }
 
   setOpen(isOpen: Boolean) {
@@ -116,12 +154,54 @@ export class ShoppingCartsPage implements OnInit {
     }
   }
 
+  sortShoppingCarts() {
+    this.shoppingCarts.sort(function (a, b) {
+      if (a.purchaseDate < b.purchaseDate)
+        return -1;
+      else if (a.purchaseDate > b.purchaseDate)
+        return 1;
+      else
+        return 0;
+    });
+    this.shoppingCartsHistory.sort(function (a, b) {
+      if (a.purchaseDate > b.purchaseDate)
+        return -1;
+      else if (a.purchaseDate < b.purchaseDate)
+        return 1;
+      else
+        return 0;
+    });
+  }
+
+  toggleShowHistory(show: Boolean) {
+    if (show){
+      localStorage.setItem('showHistory', "true")
+      this.showHistory = true;
+    } else {
+      localStorage.setItem('showHistory', "false")
+      this.showHistory = false;
+    }
+  }
+
+  getShoppingCarts() {
+    this.firebaseService.getShoppingCarts(this.user.id).then((data) => {
+      this.shoppingCarts = [];
+      this.shoppingCartsHistory = [];
+      let shoppingCartsData: ShoppingCart[] = data;
+      shoppingCartsData.forEach((shoppingCart) => {
+        if (shoppingCart.history){
+          this.shoppingCartsHistory.push(shoppingCart);
+        } else {
+          this.shoppingCarts.push(shoppingCart);
+        }
+      })
+      this.sortShoppingCarts();
+    });
+  }
+
   handleRefresh(event: any) {
     setTimeout(() => {
-      this.firebaseService.getShoppingCarts(this.user.id).then((data) => {
-        this.shoppingCarts = [];
-        this.shoppingCarts = data;
-      });
+      this.getShoppingCarts();
       event.target.complete();
     }, 2000);
   };

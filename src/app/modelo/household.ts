@@ -1,4 +1,5 @@
-import { Food } from "./food";
+import { PantryFood } from "./pantry-food";
+import { PatternFood } from "./pattern-food";
 
 export class Household {
     public id: string;
@@ -6,7 +7,7 @@ export class Household {
     public creator: string;
     public users: string[];
     public pantries: string[];
-    public foods: Food[];
+    public foods: PatternFood[];
 
     constructor() {
         this.users = [];
@@ -32,9 +33,9 @@ export class Household {
             });
         };
         if (jsonObject["foods"] != null) {
-            household.foods = new Array<Food>();
+            household.foods = new Array<PatternFood>();
             jsonObject["foods"].forEach((foodJson: any) => {
-                household.foods.push(Food.createFromJsonObject(foodJson));
+                household.foods.push(PatternFood.createFromJsonObject(foodJson));
             });
         };
         return household;

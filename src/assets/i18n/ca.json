@@ -68,5 +68,11 @@
     "QR": "Codi QR:",
     "EMAIL_ERROR_VERIFICATION": "L'email no està verificat!",
     "PURCHASE_HISTORY": "Historial de compres",
-    "WITHOUT_ACTIVE_LIST": "No hi ha cap llista de la compra activa!"
+    "WITHOUT_ACTIVE_LIST": "No hi ha cap llista de la compra activa!",
+    "NEW_SHOPPING_CART": "Nova llista de la compra",
+    "SUPERMARKET": "Supermercat",
+    "DESCRIPTION_NEW_SHOPPING_CART": "Descripció de la llista de la compra",
+    "SUPERMARKET_NEW_SHOPPING_CART": "Supermercat on es farà la compra",
+    "USERS_SHOPPING_CART": "Acompanyants de compres",
+    "PURCHASE_DATE": "Data de la compra"
 }

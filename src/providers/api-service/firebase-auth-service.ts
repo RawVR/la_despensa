@@ -54,18 +54,7 @@ export class FirebaseAuthService {
             return user;
         } catch (error) {
             console.log('Error:', error);
-        }
-    }
-
-    async logInUserGoogle(): Promise<any> {
-        try {
-            const { user } = await this.afAuth.signInWithPopup(new auth.GoogleAuthProvider());
-            if (user){
-                localStorage.setItem('user.id', user.uid);
-            }
-            return user;
-        } catch (error) {
-            console.log('Error:', error);
+            throw new Error("Login failed");
         }
     }
 

@@ -4,10 +4,11 @@ import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-sc
 import { MenuController, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
-import { Food } from '../modelo/food';
+import { PantryFood } from '../modelo/pantry-food';
 import { Household } from '../modelo/household';
 import { Pantry } from '../modelo/pantry';
 import { User } from '../modelo/user';
+import { PatternFood } from '../modelo/pattern-food';
 
 @Component({
   selector: 'app-show-pantry',
@@ -155,17 +156,19 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   }
 
   newFood(values: any) {
-    let food = new Food();
-    food.name = values['name'];
-    food.description = values['description'];
-    food.category = values['category'];
-    food.barCode = values['barCode'];
-    food.tags = values['tags'].split(',');
-    this.household.foods.push(food);
+    let pantryFood = new PantryFood();
+    let patternFood = new PatternFood();
+    pantryFood.name = values['name'];
+    pantryFood.description = values['description'];
+    pantryFood.category = values['category'];
+    pantryFood.barCode = values['barCode'];
+    pantryFood.tags = values['tags'].split(',');
+    patternFood.setDataFromPantryFood(pantryFood);
+    this.household.foods.push(patternFood);
     this.firebaseService.updateHousehold(this.household);
-    food.expiration = values['expiration'];
-    food.quantity = values['quantity'];
-    this.pantry.foods.push(food);
+    pantryFood.expiration = values['expiration'];
+    pantryFood.quantity = values['quantity'];
+    this.pantry.foods.push(pantryFood);
     this.firebaseService.updatePantry(this.pantry);
     this.setOpen(false);
   }

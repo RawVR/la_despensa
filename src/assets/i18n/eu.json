@@ -68,5 +68,11 @@
     "QR": "QR:",
     "EMAIL_ERROR_VERIFICATION": "Posta elektronikoa baieztatu gabe dago!",
     "PURCHASE_HISTORY": "Erosketa historia",
-    "WITHOUT_ACTIVE_LIST": "Ez dago aktibo dagoen erosketa zerrendarik!"
+    "WITHOUT_ACTIVE_LIST": "Ez dago aktibo dagoen erosketa zerrendarik!",
+    "NEW_SHOPPING_CART": "Erosketako zerrenda berria",
+    "SUPERMARKET": "Supermerkatua",
+    "DESCRIPTION_NEW_SHOPPING_CART": "Erosketako zerrendaren deskribapena",
+    "SUPERMARKET_NEW_SHOPPING_CART": "Erosketa egiten den supermerkatua",
+    "USERS_SHOPPING_CART": "Erosketan lagunduak",
+    "PURCHASE_DATE": "Erosketaren data"
 }

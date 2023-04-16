@@ -200,7 +200,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
       return true;
     }
     if (status.denied || status.neverAsked) {
-      const c = confirm(this.translate.instant('DELETE_HOUSEHOLD_MESSAGE'));
+      const c = confirm(this.translate.instant('CHECK_PERMISSION'));
       this.scanningQR = false;
       if (c) {
         BarcodeScanner.openAppSettings();

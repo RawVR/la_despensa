@@ -43,6 +43,10 @@ const routes: Routes = [
     path: 'settings',
     loadChildren: () => import('./settings/settings.module').then( m => m.SettingsPageModule)
   },
+  {
+    path: 'show-shopping-cart',
+    loadChildren: () => import('./show-shopping-cart/show-shopping-cart.module').then( m => m.ShowShoppingCartPageModule)
+  },
 ];
 
 @NgModule({

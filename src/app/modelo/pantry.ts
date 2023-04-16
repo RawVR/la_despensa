@@ -1,11 +1,11 @@
-import { Food } from "./food";
+import { PantryFood } from "./pantry-food";
 
 export class Pantry {
     public id: string;
     public description: string;
     public household: string;
     public type: string;
-    public foods: Food[];
+    public foods: PantryFood[];
 
     constructor() {
         this.foods = [];
@@ -18,9 +18,9 @@ export class Pantry {
         pantry.household = jsonObject["household"];
         pantry.type = jsonObject["type"];
         if (jsonObject["foods"] != null) {
-            pantry.foods = new Array<Food>();
+            pantry.foods = new Array<PantryFood>();
             jsonObject["foods"].forEach((foodJson: any) => {
-                pantry.foods.push(Food.createFromJsonObject(foodJson));
+                pantry.foods.push(PantryFood.createFromJsonObject(foodJson));
             });
         };
         return pantry;

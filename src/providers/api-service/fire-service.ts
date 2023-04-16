@@ -296,7 +296,7 @@ export class FireServiceProvider {
     //#region ShoppingCarts
     getShoppingCart(ShoppingCartID: string): Promise<ShoppingCart> {
         let promise = new Promise<ShoppingCart>((resolve, reject) => {
-            const shoppingCartRef = this.angularFirestore.collection("shoppingCart").ref.doc(ShoppingCartID).get().then((data: any) => {
+            const shoppingCartRef = this.angularFirestore.collection("shoppingCarts").ref.doc(ShoppingCartID).get().then((data: any) => {
                 if (data.exists) {
                     let shoppingCartJson = data.data();
                     let shoppingCart = ShoppingCart.createFromJsonObject(shoppingCartJson);
@@ -311,8 +311,8 @@ export class FireServiceProvider {
 
     async getShoppingCarts(ShoppingCartID: string): Promise<ShoppingCart[]> {
         let promise = new Promise<ShoppingCart[]>(async (resolve, reject) => {
-            const shoppingCartRef = this.angularFirestore.collection('shoppingCart');
-            const snapshot = await shoppingCartRef.ref.where('shoppingCart', '==', ShoppingCartID).get()
+            const shoppingCartRef = this.angularFirestore.collection('shoppingCarts');
+            const snapshot = await shoppingCartRef.ref.where('users', 'array-contains', ShoppingCartID).get()
                 .then((data: any) => {
                     let shoppingCarts = new Array<ShoppingCart>();
                     data.forEach((element: { data: () => any; }) => {

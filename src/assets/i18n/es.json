@@ -73,5 +73,6 @@
     "SUPERMARKET": "Supermercado",
     "DESCRIPTION_NEW_SHOPPING_CART": "Descripción de la lista de la compra",
     "SUPERMARKET_NEW_SHOPPING_CART": "Supermercado donde se realizará la compra",
-    "USERS_SHOPPING_CART": "Acompañantes de compras"
+    "USERS_SHOPPING_CART": "Acompañantes de compras",
+    "PURCHASE_DATE": "Fecha de compra"
 }
