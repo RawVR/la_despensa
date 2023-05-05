@@ -98,16 +98,6 @@ export class LoginPage implements OnInit {
       })
   }
 
-  async onLoginGoogle() {
-    await this.authService.logInUserGoogle().then(result => {
-      if (result){
-        this.navCtrl.navigateForward('households');
-      }
-    }).catch(() => {
-      console.log("¡Error!")
-    })
-  }
-
   cancel() {
     this.modal.dismiss(null, 'cancel');
   }
