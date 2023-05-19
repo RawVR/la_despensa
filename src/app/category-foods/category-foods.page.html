@@ -1,0 +1,113 @@
+<ion-menu contentId="category-foods-content">
+  <ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="end">
+        <ion-menu-toggle>
+          <ion-button>
+            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+          </ion-button>
+        </ion-menu-toggle>
+      </ion-buttons>
+      <ion-title>{{user.first_name}} {{user.last_names}}</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <ion-content class="ion-padding">
+    <ion-list>
+      <ion-item [routerLink]="['/households']" routerDirection="root">
+        <ion-icon slot="start" name="home"></ion-icon>
+        {{ "HOUSEHOLDS_TITTLE" | translate }}
+      </ion-item>
+      <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
+        <ion-icon slot="start" name="cart"></ion-icon>
+        {{ "SHOPPING_CARTS_TITTLE" | translate }}
+      </ion-item>
+      <ion-item [routerLink]="['/settings']" routerDirection="root">
+        <ion-icon slot="start" name="settings"></ion-icon>
+        {{ "SETTINGS_TITTLE" | translate }}
+      </ion-item>
+      <!-- Botón de cierre de sesión -->
+      <ion-item [routerLink]="['/logout']" routerDirection="root">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        {{ "LOGOUT" | translate }}
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-menu>
+
+<div class="ion-page" id="category-foods-content">
+  <ion-header [translucent]="true">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title>
+        {{ "CATEGORY_FOODS" | translate }}
+      </ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="setOpen(true)">
+          <ion-icon slot="icon-only"name="add-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content [fullscreen]="true">
+    <div *ngFor="let household of households; index as h">
+      <ion-item color="primary">
+        <ion-label>
+          {{ household.description }}
+        </ion-label>
+      </ion-item>
+      <ion-item-sliding *ngFor="let category of household.categories; index as c">
+        <ion-item>
+          {{ category }}
+          <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
+        </ion-item>
+        <ion-item-options side="end">
+          <ion-item-option color="danger" (click)="deleteCategory(h, c)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+      </ion-item-sliding>
+    </div>
+  </ion-content>
+
+  <ion-modal [isOpen]="isModalOpen">
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="start">
+            <ion-button (click)="setOpen(false)">
+              <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>{{ "NEW_CATEGORY" | translate }}</ion-title>
+          <ion-buttons slot="end">
+            <ion-button (click)="newCategory(category_validation_form.value)" [strong]="true"
+              [disabled]="!category_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
+          </ion-buttons>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding">
+        <form [formGroup]="category_validation_form">
+          <ion-item>
+            <ion-label position="floating">{{ "DESCRIPTION" | translate }}</ion-label>
+            <ion-input type="text" placeholder="{{ 'DESCRIPTION_CATEGORY' | translate }}"
+              formControlName="description"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-select placeholder="{{ 'HOUSEHOLDS_CATEGORIES' | translate }}" formControlName="households" multiple="true"
+              cancelText="{{ 'CANCEL' | translate }}" okText="{{ 'Ok' | translate }}">
+              <ng-container *ngFor="let household of households">
+                <ion-select-option [value]="household.id">
+                  {{ household.description }}
+                </ion-select-option>
+              </ng-container>
+            </ion-select>
+          </ion-item>
+        </form>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+
+</div>

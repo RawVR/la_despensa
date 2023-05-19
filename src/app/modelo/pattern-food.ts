@@ -12,9 +12,9 @@ export class PatternFood {
 
     public static createFromJsonObject(jsonObject: any): PatternFood {
         let food: PatternFood = new PatternFood();
-        food.name = jsonObject["name"],
-        food.category = jsonObject["category"],
-        food.barCode = jsonObject["barCode"]
+        food.name = jsonObject["name"];
+        food.category = jsonObject["category"];
+        food.barCode = jsonObject["barCode"];
         if (jsonObject["tags"] != null) {
             food.tags = new Array<string>();
             jsonObject["tags"].forEach((tag: any) => {

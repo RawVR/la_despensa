@@ -25,6 +25,11 @@
         <ion-icon slot="start" name="settings"></ion-icon>
         {{ "SETTINGS_TITTLE" | translate }}
       </ion-item>
+      <!-- Botón de cierre de sesión -->
+      <ion-item [routerLink]="['/logout']" routerDirection="root">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        {{ "LOGOUT" | translate }}
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>

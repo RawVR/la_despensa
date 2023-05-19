@@ -5,9 +5,8 @@ import { IonModal, ModalController, NavController, ToastController } from '@ioni
 
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { HomePage } from '../home/home.page';
-import { User } from '../modelo/user';
 import { TranslateService } from '@ngx-translate/core';
+import { Platform } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -32,7 +31,7 @@ export class LoginPage implements OnInit {
     }
     if (localStorage.getItem('language')) {
       let language = localStorage.getItem('language');
-      if (language){
+      if (language) {
         this.translate.use(language);
       }
     } else {
@@ -41,7 +40,7 @@ export class LoginPage implements OnInit {
     }
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.login_validation_form = this.formBuilder.group({
       email: new FormControl('', Validators.compose([
         Validators.pattern('^[a-zñA-ZÑáéíóúÁÉÍÓÚ0-9_.+-]+[@]{1}[a-zñA-ZÑáéíóúÁÉÍÓÚ0-9-]+[.]{1}[a-zA-Z]+$'),
@@ -69,22 +68,32 @@ export class LoginPage implements OnInit {
         Validators.required
       ]))
     });
+
+    this.authService.getAuthState().subscribe(user => {
+      if (user) {
+        // Usuario autenticado
+        this.navCtrl.navigateForward('households');
+      } else {
+        // Usuario no autenticado
+      }
+    });
   }
 
   async onLogin(values: any) {
     this.authService.logInUser(values["email"], values["password"])
-    //this.authService.logInUser("rawkvr@gmail.com", "12345678")
+      //this.authService.logInUser("rawkvr@gmail.com", "12345678")
       .then(async (user) => {
         if (this.authService.isEmailVerified(user)) {
           await this.firebaseService.getUser(user.uid).then((data) => {
             this.currentUser = data;
+          }).then(async () => {
+            if (this.currentUser.first_name == "") {
+              this.setOpenModal(true);
+            } else {
+              localStorage.setItem('user.id', this.currentUser.id);
+              this.navCtrl.navigateForward('households');
+            }
           });
-          if (this.currentUser.first_name == "") {
-            this.setOpenModal(true);
-          } else {
-            localStorage.setItem('user.id', this.currentUser.id);
-            this.navCtrl.navigateForward('households');
-          }
         } else {
           const toast = await this.toastController.create({
             message: this.translate.instant('EMAIL_ERROR_VERIFICATION'),
@@ -116,3 +125,4 @@ export class LoginPage implements OnInit {
     this.isModalOpen = isOpen;
   }
 }
+

@@ -47,6 +47,18 @@ const routes: Routes = [
     path: 'show-shopping-cart',
     loadChildren: () => import('./show-shopping-cart/show-shopping-cart.module').then( m => m.ShowShoppingCartPageModule)
   },
+  {
+    path: 'category-foods',
+    loadChildren: () => import('./category-foods/category-foods.module').then( m => m.CategoryFoodsPageModule)
+  },
+  {
+    path: 'show-pantry-food',
+    loadChildren: () => import('./show-pantry-food/show-pantry-food.module').then( m => m.ShowPantryFoodPageModule)
+  },
+  {
+    path: 'logout',
+    loadChildren: () => import('./logout/logout.module').then( m => m.LogoutPageModule)
+  },
 ];
 
 @NgModule({

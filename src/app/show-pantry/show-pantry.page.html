@@ -25,6 +25,11 @@
         <ion-icon slot="start" name="settings"></ion-icon>
         {{ "SETTINGS_TITTLE" | translate }}
       </ion-item>
+      <!-- Botón de cierre de sesión -->
+      <ion-item [routerLink]="['/logout']" routerDirection="root">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        {{ "LOGOUT" | translate }}
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -59,12 +64,24 @@
       <div *ngFor="let food of pantry.foods; index as i">
         <ion-item-sliding *ngIf="category === food.category">
           <ion-item>
-            <ion-label>
-              {{food.name}} - {{food.description}}
-            </ion-label>
+            <ion-grid>
+              <ion-row>
+                <ion-label>
+                  {{food.name}} {{food.description}}
+                </ion-label>
+              </ion-row>
+              <ion-row>
+                <ion-chip *ngFor="let tag of food.tags" color="primary">
+                  {{ tag }}
+                </ion-chip>
+              </ion-row>
+            </ion-grid>
             <ion-icon slot="end" name="chevron-forward-outline"></ion-icon>
           </ion-item>
           <ion-item-options side="end">
+            <ion-item-option color="dark" (click)="showFood(i)">
+              <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+            </ion-item-option>
             <ion-item-option color="danger" (click)="deleteFood(i)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-item-option>
@@ -141,9 +158,13 @@
                   formControlName="description"></ion-input>
               </ion-item>
               <ion-item>
-                <ion-label position="floating">{{ "CATEGORY" | translate }}</ion-label>
-                <ion-input type="text" placeholder="{{ 'CATEGORY_PLACEHOLDER' | translate }}" formControlName="category">
-                </ion-input>
+                <ion-select placeholder="{{ 'CATEGORY_PLACEHOLDER' | translate }}" formControlName="category">
+                  <ng-container *ngFor="let category of household.categories">
+                    <ion-select-option [value]="category">
+                      {{ category }}
+                    </ion-select-option>
+                  </ng-container>
+                </ion-select>
               </ion-item>
               <ion-item>
                 <ion-label>{{ "QUANTITY" | translate }}</ion-label>

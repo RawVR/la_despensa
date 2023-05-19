@@ -1,4 +1,4 @@
-<ion-menu contentId="show-shopping-cart-content">
+<ion-menu contentId="show-pantry-content">
   <ion-header>
     <ion-toolbar>
       <ion-buttons slot="end">
@@ -34,24 +34,18 @@
   </ion-content>
 </ion-menu>
 
-<div class="ion-page" id="show-shopping-cart-content">
-  <ion-header [translucent]="true">
+<div class="ion-page" id="show-pantry-food-content">
+  <ion-header>
     <ion-toolbar>
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
-      <ion-title>
-        {{ shoppingCart.description }}
-      </ion-title>
-      <ion-buttons slot="end">
-        <ion-button [routerLink]="['/shopping-carts']" routerDirection="root">
-          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
+      <ion-title>{{food.name}} {{food.description}}</ion-title>
     </ion-toolbar>
   </ion-header>
 
-  <ion-content [fullscreen]="true">
 
-  </ion-content>
-</div>
+  <ion-content [fullscreen]="true">
+    <ion-item>
+
+    </ion-item>

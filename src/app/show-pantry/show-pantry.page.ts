@@ -9,6 +9,7 @@ import { Household } from '../modelo/household';
 import { Pantry } from '../modelo/pantry';
 import { User } from '../modelo/user';
 import { PatternFood } from '../modelo/pattern-food';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-show-pantry',
@@ -29,9 +30,8 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   isCreator: Boolean;
   scanningBarcode: Boolean;
 
-  constructor(private toastController: ToastController, private menuCtrl: MenuController,
-    public formBuilder: FormBuilder, private firebaseService: FireServiceProvider,
-    public translate: TranslateService) {
+  constructor(private router: Router, private toastController: ToastController, private menuCtrl: MenuController,
+    public formBuilder: FormBuilder, private firebaseService: FireServiceProvider, public translate: TranslateService) {
     this.user = new User();
     this.household = new Household();
     this.pantry = new Pantry();
@@ -104,15 +104,15 @@ export class ShowPantryPage implements OnInit, OnDestroy {
         Validators.required
       ])),
       barCode: new FormControl('', Validators.compose([
-        Validators.pattern('^^[0-9]{13}$'),
+        Validators.pattern('^[0-9]{13}$'),
         Validators.minLength(13),
         Validators.maxLength(13),
         Validators.required
       ])),
       tags: new FormControl('', Validators.compose([
-        Validators.pattern('^[a-z A-ZáéíóúÁÉÍÓÚ0-9_,.-]+$'),
-        Validators.minLength(13),
-        Validators.maxLength(13),
+        Validators.pattern('^[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]{3,}(, ?[a-zA-ZñÑáéíóúÁÉÍÓÚüÜ]{3,})*$'),
+        Validators.minLength(3),
+        Validators.maxLength(128),
         Validators.required
       ]))
     });
@@ -193,6 +193,14 @@ export class ShowPantryPage implements OnInit, OnDestroy {
       });
       await toast.present();
     }
+  }
+
+  showFood(index: number) {
+    this.router.navigate(['/show-pantry-food'], {
+      queryParams: {
+        food: JSON.stringify(this.pantry.foods[index])
+      }
+    });
   }
 
   async scanFood(mode: number) {

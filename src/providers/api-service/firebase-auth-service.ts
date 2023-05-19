@@ -8,6 +8,7 @@ import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { FireServiceProvider } from './fire-service';
 import { User } from 'src/app/modelo/user';
+import { AuthCredential, OAuthProvider, getAuth, signInWithCredential, signInWithCustomToken } from 'firebase/auth';
 
 @Injectable({
     providedIn: 'root',
@@ -68,6 +69,7 @@ export class FirebaseAuthService {
                 this.afAuth.signOut()
                     .then(() => {
                         console.log("Logout");
+                        localStorage.setItem('user.id', null);
                         resolve(null);
                     }).catch((error) => {
                         reject();
@@ -78,5 +80,9 @@ export class FirebaseAuthService {
 
     userDetails() {
         return this.afAuth.user;
+    }
+
+    getAuthState() {
+        return this.afAuth.authState;
     }
 }

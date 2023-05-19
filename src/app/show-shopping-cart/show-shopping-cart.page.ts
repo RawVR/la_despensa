@@ -48,4 +48,8 @@ export class ShowShoppingCartPage implements OnInit {
     }
   }
 
+  navigateToHouseholds() {
+    this.router.navigateByUrl('/households', { skipLocationChange: true });
+  }
+  
 }

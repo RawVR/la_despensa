@@ -3,12 +3,13 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
-import { NavController, IonModal, AlertController, ToastController } from '@ionic/angular';
+import { NavController, IonModal, AlertController, ToastController, MenuController } from '@ionic/angular';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { Household } from '../modelo/household';
 import { User } from '../modelo/user';
 import { exists } from 'fs';
 import { TranslateService } from '@ngx-translate/core';
+import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-service';
 
 @Component({
   selector: 'app-households',
@@ -27,7 +28,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
 
   constructor(private router: Router, private alertCtrl: AlertController, private navCtrl: NavController,
     public formBuilder: FormBuilder, private firebaseService: FireServiceProvider, private toastController: ToastController,
-    angularQRModule: QRCodeModule, public translate: TranslateService) {
+    angularQRModule: QRCodeModule, public translate: TranslateService, private menuCtrl: MenuController) {
     this.user = new User();
     this.isModalOpen = false;
     this.scanningQR = false;
@@ -37,20 +38,23 @@ export class HouseholdsPage implements OnInit, OnDestroy {
     if (language) {
       this.translate.use(language);
     }
-
   }
 
   ngOnInit() {
-    const userID = localStorage.getItem('user.id');
-    if (userID) {
-      this.firebaseService.getUser(userID).then((data) => {
-        this.user = data;
-      });
-      this.firebaseService.getHouseholds(userID).then((data) => {
-        this.households = [];
-        this.households = data;
-      });
-    }
+    this.menuCtrl.enable(true, 'households-content');
+    setTimeout(() => {
+      const userID = localStorage.getItem('user.id');
+      if (userID) {
+        this.firebaseService.getUser(userID).then((data) => {
+          this.user = data;
+          this.firebaseService.getHouseholds(userID).then((data) => {
+            this.households = [];
+            this.households = data;
+          });
+        });
+      }
+    }, 1000);
+
 
     this.household_validation_form = this.formBuilder.group({
       description: new FormControl('', Validators.compose([
@@ -68,10 +72,6 @@ export class HouseholdsPage implements OnInit, OnDestroy {
     if (this.scanningQR) {
       this.stopScan();
     }
-  }
-
-  goToMenu(option: string) {
-    this.navCtrl.navigateRoot(option);
   }
 
   newHousehold(values: any) {
@@ -162,7 +162,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
                 if (unlinked) {
                   const toast = await this.toastController.create({
                     message: this.translate.instant('UNLINK_HOUSEHOLD_DELETE_TOAST_MESSAGE1') + this.households[index].description +
-                    this.translate.instant('UNLINK_HOUSEHOLD_DELETE_TOAST_MESSAGE2'),
+                      this.translate.instant('UNLINK_HOUSEHOLD_DELETE_TOAST_MESSAGE2'),
                     duration: 1500,
                     icon: 'qr-code'
                   });
@@ -191,6 +191,10 @@ export class HouseholdsPage implements OnInit, OnDestroy {
   showHousehold(index: number) {
     localStorage.setItem('household.id', this.households[index].id);
     this.router.navigate(['/show-household']);
+  }
+
+  showCategoryFoods() {
+    this.router.navigate(['/category-foods']);
   }
 
   async checkPermission() {
@@ -275,8 +279,6 @@ export class HouseholdsPage implements OnInit, OnDestroy {
     }
     this.scanningQR = false;
   };
-
-
 
   handleRefresh(event: any) {
     setTimeout(() => {

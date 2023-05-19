@@ -25,6 +25,11 @@
         <ion-icon slot="start" name="settings"></ion-icon>
         {{ "SETTINGS_TITTLE" | translate }}
       </ion-item>
+      <!-- Botón de cierre de sesión -->
+      <ion-item [routerLink]="['/logout']" routerDirection="root">
+        <ion-icon slot="start" name="log-out"></ion-icon>
+        {{ "LOGOUT" | translate }}
+      </ion-item>
     </ion-list>
   </ion-content>
 </ion-menu>
@@ -37,10 +42,10 @@
       </ion-buttons>
       <ion-buttons slot="end">
         <ion-button (click)="linkHousehold()">
-          <ion-icon slot="icon-only"name="link-outline"></ion-icon>
+          <ion-icon slot="icon-only" name="link-outline"></ion-icon>
         </ion-button>
         <ion-button (click)="setOpen(true)">
-          <ion-icon slot="icon-only"name="add-outline"></ion-icon>
+          <ion-icon slot="icon-only" name="add-outline"></ion-icon>
         </ion-button>
       </ion-buttons>
       <ion-title>
@@ -50,6 +55,16 @@
   </ion-header>
 
   <ion-content [fullscreen]="true">
+    <ion-item color="primary">
+      <ion-label>
+        {{ "CATEGORY_FOODS" | translate }}
+      </ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="showCategoryFoods()">
+          <ion-icon slot="icon-only" name="eye-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
     <div>
       <ion-item-sliding *ngFor="let household of households; index as i">
         <ion-item>
@@ -81,7 +96,8 @@
             </ion-buttons>
             <ion-title>{{ "NEW_HOUSEHOLD" | translate }}</ion-title>
             <ion-buttons slot="end">
-              <ion-button (click)="newHousehold(household_validation_form.value)" [strong]="true" [disabled]="!household_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
+              <ion-button (click)="newHousehold(household_validation_form.value)" [strong]="true"
+                [disabled]="!household_validation_form.valid">{{ "CREATE" | translate }}</ion-button>
             </ion-buttons>
           </ion-toolbar>
         </ion-header>
