@@ -30,4 +30,15 @@ export class PatternFood {
         this.barCode = pantryFood.barCode;
         this.tags = pantryFood.tags;
     }
+
+    public getTagsToString(): string {
+        let tags = "";
+        this.tags.forEach((tag, index) => {
+            if (index !== 0) {
+                tags += ", ";
+            }
+            tags += tag;
+        });
+        return tags;
+    }
 }

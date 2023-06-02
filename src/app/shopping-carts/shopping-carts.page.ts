@@ -32,12 +32,13 @@ export class ShoppingCartsPage implements OnInit {
     private navCtrl: NavController, private menuCtrl: MenuController,
     private authService: FirebaseAuthService, private firebaseService: FireServiceProvider,
     public translate: TranslateService, public formBuilder: FormBuilder) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.shoppingCarts = [];
     this.isModalOpen = false;
-    if (localStorage.getItem('showHistory') != null){
+    if (localStorage.getItem('showHistory') != null) {
       let showHistory = localStorage.getItem('showHistory');
-      if (localStorage.getItem('showHistory') == "true"){
+      if (localStorage.getItem('showHistory') == "true") {
         this.showHistory = true;
       } else {
         this.showHistory = false;
@@ -87,7 +88,7 @@ export class ShoppingCartsPage implements OnInit {
     shoppingCart.supermarket = values['supermarket'];
     shoppingCart.purchaseDate = values["purchaseDate"];
     shoppingCart.users.push(this.user.id);
-    if (values['users'] != null){
+    if (values['users'] != null) {
       values['users'].forEach((value: any) => {
         shoppingCart.users.push(value);
       });
@@ -101,7 +102,7 @@ export class ShoppingCartsPage implements OnInit {
   }
 
   showShoppingCart(index: number, history: Boolean) {
-    if (history){
+    if (history) {
       localStorage.setItem('shoppingCart.id', this.shoppingCartsHistory[index].id);
     } else {
       localStorage.setItem('shoppingCart.id', this.shoppingCarts[index].id);
@@ -110,15 +111,15 @@ export class ShoppingCartsPage implements OnInit {
   }
 
   deleteShoppingCart(index: number, history: Boolean) {
-    if (history){
+    if (history) {
       this.firebaseService.deleteShoppingCart(this.shoppingCartsHistory[index].id).then((deleted) => {
-        if (deleted){
+        if (deleted) {
           this.shoppingCartsHistory.splice(index, 1);
         }
       });
     } else {
       this.firebaseService.deleteShoppingCart(this.shoppingCarts[index].id).then((deleted) => {
-        if (deleted){
+        if (deleted) {
           this.shoppingCarts.splice(index, 1);
         }
       });;
@@ -174,7 +175,7 @@ export class ShoppingCartsPage implements OnInit {
   }
 
   toggleShowHistory(show: Boolean) {
-    if (show){
+    if (show) {
       localStorage.setItem('showHistory', "true")
       this.showHistory = true;
     } else {
@@ -189,7 +190,7 @@ export class ShoppingCartsPage implements OnInit {
       this.shoppingCartsHistory = [];
       let shoppingCartsData: ShoppingCart[] = data;
       shoppingCartsData.forEach((shoppingCart) => {
-        if (shoppingCart.history){
+        if (shoppingCart.history) {
           this.shoppingCartsHistory.push(shoppingCart);
         } else {
           this.shoppingCarts.push(shoppingCart);

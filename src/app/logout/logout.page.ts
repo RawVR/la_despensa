@@ -9,7 +9,9 @@ import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-ser
 })
 export class LogoutPage implements OnInit {
 
-  constructor(private router: Router, private authService: FirebaseAuthService) { }
+  constructor(private router: Router, private authService: FirebaseAuthService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
+  }
 
   ngOnInit() {
     this.authService.logOutUser().then(() => {

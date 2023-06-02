@@ -12,6 +12,7 @@ export class ShowHouseholdFoodsPage implements OnInit {
   user: User;
 
   constructor(private firebaseService: FireServiceProvider, public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
 
     let language = localStorage.getItem('language');

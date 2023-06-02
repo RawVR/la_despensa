@@ -18,6 +18,7 @@ export class RegisterPage implements OnInit {
 
   constructor(public router: Router, private authService: FirebaseAuthService, public formBuilder: FormBuilder,
     public modalCtrl: ModalController, public firebaseService: FireServiceProvider, public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     let language = localStorage.getItem('language');
     this.translate.setDefaultLang('en');
     if (language) {

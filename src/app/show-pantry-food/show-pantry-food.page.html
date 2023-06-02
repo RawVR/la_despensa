@@ -1,51 +1,94 @@
-<ion-menu contentId="show-pantry-content">
+<div class="ion-page" id="main-content">
   <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="end">
-        <ion-menu-toggle>
-          <ion-button>
-            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>
-      </ion-buttons>
-      <ion-title>{{user.first_name}} {{user.last_names}}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list>
-      <ion-item (click)="navigateToHouseholds()">
-        <ion-icon slot="start" name="home"></ion-icon>
-        {{ "HOUSEHOLDS_TITTLE" | translate }}
-      </ion-item>
-      <ion-item [routerLink]="['/shopping-carts']" routerDirection="root">
-        <ion-icon slot="start" name="cart"></ion-icon>
-        {{ "SHOPPING_CARTS_TITTLE" | translate }}
-      </ion-item>
-      <ion-item [routerLink]="['/settings']" routerDirection="root">
-        <ion-icon slot="start" name="settings"></ion-icon>
-        {{ "SETTINGS_TITTLE" | translate }}
-      </ion-item>
-      <!-- Botón de cierre de sesión -->
-      <ion-item [routerLink]="['/logout']" routerDirection="root">
-        <ion-icon slot="start" name="log-out"></ion-icon>
-        {{ "LOGOUT" | translate }}
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
-<div class="ion-page" id="show-pantry-food-content">
-  <ion-header>
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-buttons slot="start">
-        <ion-menu-button></ion-menu-button>
+        <ion-button (click)="backToPantry()">
+          <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
+        </ion-button>
       </ion-buttons>
-      <ion-title>{{food.name}} {{food.description}}</ion-title>
+      <ion-title>{{food.name}}</ion-title>
+      <ion-buttons slot="end">
+        <ion-button (click)="editFood()" [hidden]="isEditing">
+          <ion-icon name="create-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="saveFood()" [hidden]="!isEditing">
+          <ion-icon name="save-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-toolbar>
   </ion-header>
-
 
   <ion-content [fullscreen]="true">
-    <ion-item>
+    <form [formGroup]="food_validation_form">
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'NAME' | translate }}</ion-label>
+          <ion-input type="text" [(ngModel)]="food.name" formControlName="name" class="CustomInput"></ion-input>
+        </ion-item>
+      </ion-card>
 
-    </ion-item>
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'DESCRIPTION' | translate }}</ion-label>
+          <ion-input type="text" [(ngModel)]="food.description" formControlName="description"
+            class="CustomInput"></ion-input>
+        </ion-item>
+      </ion-card>
+
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'QUANTITY' | translate }}</ion-label>
+          <ion-input type="number" [(ngModel)]="food.quantity" formControlName="quantity"
+            class="CustomInput"></ion-input>
+        </ion-item>
+      </ion-card>
+
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'EXPIRY_DATE' | translate }}</ion-label>
+          <ion-datetime-button datetime="datetime"></ion-datetime-button>
+        </ion-item>
+        <ion-modal [keepContentsMounted]="true">
+          <ng-template>
+            <ion-datetime id="datetime" formControlName="expiration" [value]="food?.expiration"></ion-datetime>
+          </ng-template>
+        </ion-modal>
+      </ion-card>
+
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'CATEGORY_FOOD' | translate }}</ion-label>
+        </ion-item>
+        <ion-select placeholder="{{ 'CATEGORY_PLACEHOLDER' | translate }}" formControlName="category">
+          <ng-container *ngFor="let category of household.categories">
+            <ion-select-option [value]="category">
+              {{ category }}
+            </ion-select-option>
+          </ng-container>
+        </ion-select>
+      </ion-card>
+
+      <ion-card class="barcode-card">
+        <ion-item color="primary">
+          <ion-label>{{ 'BARCODE' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <svg id="barcode"></svg>
+        </ion-item>
+        <ion-item [hidden]="!isEditing">
+          <ion-input type="number" [(ngModel)]="food.barCode" formControlName="barCode"></ion-input>
+        </ion-item>
+      </ion-card>
+
+      <ion-card>
+        <ion-item color="primary">
+          <ion-label>{{ 'TAGS' | translate }}</ion-label>
+        </ion-item>
+        <ion-item>
+          <ion-input type="text" [(ngModel)]="tags" formControlName="tags" [hidden]="!isEditing"></ion-input>
+          <ion-chip *ngFor="let tag of food.tags" [hidden]="isEditing" color="primary">{{tag}}</ion-chip>
+        </ion-item>
+      </ion-card>
+    </form>
+  </ion-content>
+</div>

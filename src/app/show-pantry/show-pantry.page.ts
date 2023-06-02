@@ -29,9 +29,12 @@ export class ShowPantryPage implements OnInit, OnDestroy {
   isModalOpen: Boolean;
   isCreator: Boolean;
   scanningBarcode: Boolean;
+  searchQuery: string;
+  filteredFoods: PantryFood[];
 
   constructor(private router: Router, private toastController: ToastController, private menuCtrl: MenuController,
     public formBuilder: FormBuilder, private firebaseService: FireServiceProvider, public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.household = new Household();
     this.pantry = new Pantry();
@@ -66,6 +69,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
           if (PantryID) {
             this.firebaseService.getPantry(PantryID).then((data) => {
               this.pantry = data;
+              this.filteredFoods = this.pantry.foods;
               if (this.household.foods != null) {
                 this.household.foods.forEach(food => {
                   if (!this.foodCategories.includes(food.category)) {
@@ -103,6 +107,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
         Validators.maxLength(3),
         Validators.required
       ])),
+      expiration: new FormControl('', Validators.required),
       barCode: new FormControl('', Validators.compose([
         Validators.pattern('^[0-9]{13}$'),
         Validators.minLength(13),
@@ -166,7 +171,7 @@ export class ShowPantryPage implements OnInit, OnDestroy {
     patternFood.setDataFromPantryFood(pantryFood);
     this.household.foods.push(patternFood);
     this.firebaseService.updateHousehold(this.household);
-    pantryFood.expiration = values['expiration'];
+    pantryFood.expiration = new Date(values['expiration']);
     pantryFood.quantity = values['quantity'];
     this.pantry.foods.push(pantryFood);
     this.firebaseService.updatePantry(this.pantry);
@@ -332,6 +337,16 @@ export class ShowPantryPage implements OnInit, OnDestroy {
       }
     }
     this.isModalOpen = isOpen;
+  }
+
+  filterFoods() {
+    if (this.searchQuery) {
+      this.filteredFoods = this.pantry.foods.filter(food =>
+        food.name.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    } else {
+      this.filteredFoods = this.pantry.foods;
+    }
   }
 
   handleRefresh(event: any) {

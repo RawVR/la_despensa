@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, ToastController } from '@ionic/angular';
+import { AlertController, IonMenu, ToastController } from '@ionic/angular';
 import { TranslateService } from '@ngx-translate/core';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { Household } from '../modelo/household';
@@ -14,6 +14,7 @@ import { User } from '../modelo/user';
   styleUrls: ['./show-household.page.scss'],
 })
 export class ShowHouseholdPage implements OnInit {
+  @ViewChild('menu') menu: IonMenu;
   pantry_validation_form: FormGroup;
   user: User;
   household: Household;
@@ -25,6 +26,7 @@ export class ShowHouseholdPage implements OnInit {
   constructor(private router: Router, public formBuilder: FormBuilder, private alertCtrl: AlertController,
     private toastController: ToastController, private firebaseService: FireServiceProvider,
     public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.household = new Household();
     this.pantries = [];

@@ -9,5 +9,6 @@
         "qrcode",
         "qrdata",
         "Záéíóú"
-    ]
+    ],
+    "java.configuration.updateBuildConfiguration": "interactive"
 }

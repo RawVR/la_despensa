@@ -23,6 +23,18 @@ export class LoginPage implements OnInit {
   constructor(public router: Router, public modalController: ModalController, public formBuilder: FormBuilder,
     private toastController: ToastController, public navCtrl: NavController, private authService: FirebaseAuthService,
     private firebaseService: FireServiceProvider, public translate: TranslateService) {
+    let color_theme = localStorage.getItem('color-theme');
+    if (color_theme){
+      document.body.setAttribute('color-theme', color_theme);
+    } else {
+      const darkModeMediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      if (darkModeMediaQuery.matches) {
+        localStorage.setItem('color-theme', 'dark');
+      } else {
+        localStorage.setItem('color-theme', 'light');
+      }
+    }
+    
     this.translate.addLangs(['es', 'en']);
     this.translate.setDefaultLang('en');
     let language = window.navigator.language.substring(0, 2);

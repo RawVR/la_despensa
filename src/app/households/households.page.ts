@@ -3,13 +3,14 @@ import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms'
 import { Router } from '@angular/router';
 import { BarcodeScanner, SupportedFormat } from '@capacitor-community/barcode-scanner';
 import { QRCodeModule } from 'angularx-qrcode';
-import { NavController, IonModal, AlertController, ToastController, MenuController } from '@ionic/angular';
+import { NavController, IonModal, AlertController, ToastController, MenuController, IonMenu } from '@ionic/angular';
 import { FireServiceProvider } from 'src/providers/api-service/fire-service';
 import { Household } from '../modelo/household';
 import { User } from '../modelo/user';
 import { exists } from 'fs';
 import { TranslateService } from '@ngx-translate/core';
 import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-households',
@@ -18,6 +19,7 @@ import { FirebaseAuthService } from 'src/providers/api-service/firebase-auth-ser
 })
 export class HouseholdsPage implements OnInit, OnDestroy {
   @ViewChild(IonModal) modal: IonModal;
+  @ViewChild('menu') menu: IonMenu;
   household_validation_form: FormGroup;
   isModalOpen: Boolean;
   isCreator: Boolean;
@@ -29,6 +31,7 @@ export class HouseholdsPage implements OnInit, OnDestroy {
   constructor(private router: Router, private alertCtrl: AlertController, private navCtrl: NavController,
     public formBuilder: FormBuilder, private firebaseService: FireServiceProvider, private toastController: ToastController,
     angularQRModule: QRCodeModule, public translate: TranslateService, private menuCtrl: MenuController) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.isModalOpen = false;
     this.scanningQR = false;
@@ -66,6 +69,8 @@ export class HouseholdsPage implements OnInit, OnDestroy {
     });
 
     this.isCreator = false;
+
+
   }
 
   ngOnDestroy(): void {
@@ -190,6 +195,9 @@ export class HouseholdsPage implements OnInit, OnDestroy {
 
   showHousehold(index: number) {
     localStorage.setItem('household.id', this.households[index].id);
+    if (this.menu) {
+      this.menu.close();
+    }
     this.router.navigate(['/show-household']);
   }
 

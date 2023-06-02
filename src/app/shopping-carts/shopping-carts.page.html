@@ -1,42 +1,6 @@
-<ion-menu contentId="shopping-carts-content">
-  <ion-header>
-    <ion-toolbar>
-      <ion-buttons slot="end">
-        <ion-menu-toggle>
-          <ion-button>
-            <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
-          </ion-button>
-        </ion-menu-toggle>
-      </ion-buttons>
-      <ion-title>{{user.first_name}} {{user.last_names}}</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content class="ion-padding">
-    <ion-list>
-      <ion-item [routerLink]="['/households']" routerDirection="root">
-        <ion-icon slot="start" name="home"></ion-icon>
-        {{ "HOUSEHOLDS_TITTLE" | translate }}
-      </ion-item>
-      <ion-item>
-        <ion-icon slot="start" name="cart"></ion-icon>
-        {{ "SHOPPING_CARTS_TITTLE" | translate }}
-      </ion-item>
-      <ion-item [routerLink]="['/settings']" routerDirection="root">
-        <ion-icon slot="start" name="settings"></ion-icon>
-        {{ "SETTINGS_TITTLE" | translate }}
-      </ion-item>
-      <!-- Botón de cierre de sesión -->
-      <ion-item [routerLink]="['/logout']" routerDirection="root">
-        <ion-icon slot="start" name="log-out"></ion-icon>
-        {{ "LOGOUT" | translate }}
-      </ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
 <div class="ion-page" id="shopping-carts-content">
   <ion-header [translucent]="true">
-    <ion-toolbar>
+    <ion-toolbar color="primary">
       <ion-buttons slot="start">
         <ion-menu-button></ion-menu-button>
       </ion-buttons>
@@ -115,7 +79,7 @@
     <ion-modal [isOpen]="isModalOpen">
       <ng-template>
         <ion-header>
-          <ion-toolbar>
+          <ion-toolbar color="primary">
             <ion-buttons slot="start">
               <ion-button (click)="setOpen(false)">
                 <ion-icon slot="icon-only" name="chevron-back-outline"></ion-icon>
@@ -135,11 +99,13 @@
               <ion-input type="text" placeholder="{{ 'DESCRIPTION_NEW_SHOPPING_CART' | translate }}"
                 formControlName="description"></ion-input>
             </ion-item>
+            
             <ion-item>
               <ion-label position="floating">{{ "SUPERMARKET" | translate }}</ion-label>
               <ion-input type="text" placeholder="{{ 'SUPERMARKET_NEW_SHOPPING_CART' | translate }}"
                 formControlName="supermarket"></ion-input>
             </ion-item>
+
             <ion-item>
               <ion-label>{{ "PURCHASE_DATE" | translate }}</ion-label>
               <ion-datetime-button datetime="datetime"></ion-datetime-button>
@@ -149,6 +115,7 @@
                 <ion-datetime id="purchaseDate" formControlName="purchase_date"></ion-datetime>
               </ng-template>
             </ion-modal>
+
             <ion-item>
               <ion-select placeholder="{{ 'USERS_SHOPPING_CART' | translate }}" formControlName="users" multiple="true"
                 cancelText="{{ 'CANCEL' | translate }}" okText="{{ 'Ok' | translate }}">

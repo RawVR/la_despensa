@@ -1,5 +1,5 @@
 <ion-header>
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>{{ 'LOGIN_TITTLE' | translate }}</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -10,10 +10,30 @@
       <ion-item>
         <ion-label position="floating">{{ 'EMAIL' | translate }}</ion-label>
         <ion-input type="text" formControlName="email"></ion-input>
+        <ion-text color="danger" *ngIf="login_validation_form.get('email').invalid && login_validation_form.get('email').touched">
+          <small *ngIf="login_validation_form.get('email').errors['required']">
+            {{ 'EMAIL_REQUIRED' | translate }}
+          </small>
+          <small *ngIf="login_validation_form.get('email').errors['pattern']">
+            {{ 'EMAIL_PATTERN' | translate }}
+          </small>
+        </ion-text>
       </ion-item>
+      
       <ion-item>
         <ion-label position="floating">{{ "PASSWORD" | translate }}</ion-label>
         <ion-input type="password" formControlName="password"></ion-input>
+        <ion-text color="danger" *ngIf="login_validation_form.get('password').invalid && login_validation_form.get('password').touched">
+          <small *ngIf="login_validation_form.get('password').errors['required']">
+            {{ 'PASSWORD_REQUIRED' | translate }}
+          </small>
+          <small *ngIf="login_validation_form.get('password').errors['minlength']">
+            {{ 'PASSWORD_MIN_LENGTH' | translate }}
+          </small>
+          <small *ngIf="login_validation_form.get('password').errors['maxlength']">
+            {{ 'PASSWORD_MAX_LENGTH' | translate }}
+          </small>
+        </ion-text>
       </ion-item>
     </ion-card>
     <ion-row>

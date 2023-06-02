@@ -18,10 +18,10 @@ export class ShowShoppingCartPage implements OnInit {
   shoppingCart: ShoppingCart;
   user: User;
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router,
-    private navCtrl: NavController, private menuCtrl: MenuController,
-    private authService: FirebaseAuthService, private firebaseService: FireServiceProvider,
-    public translate: TranslateService, public formBuilder: FormBuilder) {
+  constructor(private activatedRoute: ActivatedRoute, private router: Router, private navCtrl: NavController,
+    private menuCtrl: MenuController, private authService: FirebaseAuthService, public formBuilder: FormBuilder,
+    private firebaseService: FireServiceProvider, public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.shoppingCart = new ShoppingCart();
 
@@ -51,5 +51,5 @@ export class ShowShoppingCartPage implements OnInit {
   navigateToHouseholds() {
     this.router.navigateByUrl('/households', { skipLocationChange: true });
   }
-  
+
 }

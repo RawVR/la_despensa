@@ -22,13 +22,14 @@ import { QRCodeModule } from 'angularx-qrcode';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { MenuComponent } from './menu/menu.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
 
 @NgModule({
-  declarations: [AppComponent], entryComponents: [],
+  declarations: [AppComponent, MenuComponent], entryComponents: [],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),
@@ -52,6 +53,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FireServiceProvider,
     FirebaseAuthService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  exports: [MenuComponent],
   bootstrap: [AppComponent],
 })
 

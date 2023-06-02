@@ -1,62 +1,74 @@
 body.scanner-active {
-    --background: transparent;
-    --ion-background-color: transparent;
-  }
-  
-  .scan-code {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 200px;
-    height: 200px;
-  }
-  
-  .scan-code__angle:before,
-  .scan-code__angle:after {
-    content: "";
-    position: absolute;
-    width: 60px;
-    height: 60px;
-    border-style: solid;
-    border-color: rgba(255, 255, 255, 0.6);
-    border-width: 0;
-  }
-  
-  .scan-code__angle:before {
-    border-left-width: 6px;
-    left: 0;
-  }
-  
-  .scan-code__angle:after {
-    border-right-width: 6px;
-    right: 0;
-  }
-  
-  .scan-code__angle--top:before,
-  .scan-code__angle--top:after {
-    top: 0;
-    border-top-width: 6px;
-  }
-  
-  .scan-code__angle--bottom:before,
-  .scan-code__angle--bottom:after {
-    bottom: 0;
-    border-bottom-width: 6px;
-  }
-  
-  .scan-code__angle--top:before {
-    border-top-left-radius: 4px;
-  }
-  
-  .scan-code__angle--top:after {
-    border-top-right-radius: 4px;
-  }
-  
-  .scan-code__angle--bottom:before {
-    border-bottom-left-radius: 4px;
-  }
-  
-  .scan-code__angle--bottom:after {
-    border-bottom-right-radius: 4px;
-  }
+  --background: transparent;
+  --ion-background-color: transparent;
+}
+
+.scan-code {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 200px;
+  height: 200px;
+}
+
+.scan-code__angle:before,
+.scan-code__angle:after {
+  content: "";
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.6);
+  border-width: 0;
+}
+
+.scan-code__angle:before {
+  border-left-width: 6px;
+  left: 0;
+}
+
+.scan-code__angle:after {
+  border-right-width: 6px;
+  right: 0;
+}
+
+.scan-code__angle--top:before,
+.scan-code__angle--top:after {
+  top: 0;
+  border-top-width: 6px;
+}
+
+.scan-code__angle--bottom:before,
+.scan-code__angle--bottom:after {
+  bottom: 0;
+  border-bottom-width: 6px;
+}
+
+.scan-code__angle--top:before {
+  border-top-left-radius: 4px;
+}
+
+.scan-code__angle--top:after {
+  border-top-right-radius: 4px;
+}
+
+.scan-code__angle--bottom:before {
+  border-bottom-left-radius: 4px;
+}
+
+.scan-code__angle--bottom:after {
+  border-bottom-right-radius: 4px;
+}
+
+ion-searchbar {
+  --border-width: 0;
+  --box-shadow: none;
+  --padding-start: 0;
+  --padding-end: 0;
+  --border-radius: 10px;
+}
+
+.search-item {
+  background-color: var(--ion-color-primary);
+}

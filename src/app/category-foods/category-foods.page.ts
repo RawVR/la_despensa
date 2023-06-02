@@ -20,6 +20,7 @@ export class CategoryFoodsPage implements OnInit {
 
   constructor(public formBuilder: FormBuilder, private firebaseService: FireServiceProvider,
     private toastController: ToastController, public translate: TranslateService) {
+    document.body.setAttribute('color-theme', localStorage.getItem('color-theme'));
     this.user = new User();
     this.isModalOpen = false;
 
@@ -56,7 +57,7 @@ export class CategoryFoodsPage implements OnInit {
   newCategory(values: any) {
     values['households'].forEach((householdID: string) => {
       this.households.forEach((household) => {
-        if (household.id == householdID){
+        if (household.id == householdID) {
           household.categories.push(values['description']);
           this.firebaseService.updateHousehold(household);
         }
@@ -66,7 +67,7 @@ export class CategoryFoodsPage implements OnInit {
     this.category_validation_form.reset();
   }
 
-  deleteCategory(indexHousehold: number, indexCategory: number){
+  deleteCategory(indexHousehold: number, indexCategory: number) {
     this.households[indexHousehold].categories.splice(indexCategory, 1);
     this.firebaseService.updateHousehold(this.households[indexHousehold]);
   }
